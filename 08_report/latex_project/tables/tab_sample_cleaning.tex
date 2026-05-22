@@ -1,0 +1,24 @@
+\begin{table}[tbp]
+\centering
+\caption{样本结构与数据清洗结果}
+\label{tab:sample-cleaning}
+\small
+\begin{threeparttable}
+\begin{tabularx}{\textwidth}{p{0.22\textwidth}>{\raggedleft\arraybackslash}p{0.18\textwidth}Y}
+\toprule
+处理环节 & 规模或阈值 & 说明 \\
+\midrule
+预处理原始分钟面板 & 14,546,275 & 来自预处理数据层；论文排版不覆盖原始数据。 \\
+连续竞价过滤 & 14,546,275 & 保留 09:30--11:30 与 13:00--15:00 的 A 股连续交易时段。 \\
+有效分钟阈值 & 236 & 按 code-date 计算有效分钟数，低覆盖交易日不进入模型样本。 \\
+最终分析样本 & 14,536,695 / 84 只证券 & 剔除后样本用于 LSI、MarketLSI 与模型变量构造。 \\
+交易日覆盖 & 725 日 & 有效分钟阈值后最大覆盖，用于时间顺序样本划分。 \\
+训练/验证/测试切分点 & 2025-02-28 / 2025-09-26 & 按日期顺序切分，不随机打乱。 \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item 注：证券数按模型就绪清单汇总；训练期只用于标准化参数、标签阈值和模型估计。
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

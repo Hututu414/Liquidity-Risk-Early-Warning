@@ -1,0 +1,45 @@
+\begin{table}[H]
+\centering
+\caption{稳健性检验设计}
+\label{tab:robustness-design}
+\small
+\begin{threeparttable}
+\begin{tabularx}{\textwidth}{p{0.22\textwidth}p{0.30\textwidth}Y}
+\toprule
+检验方向 & 替代设定 & 目的 \\
+\midrule
+标签阈值 & 85\% / 90\% / 95\% & 检查压力事件定义是否依赖单一训练期分位阈值。 \\
+RGARCH 测度 & RV、RBV、MedRV、RMAD & 比较不同 realized pressure measure 下的拟合和样本外损失。 \\
+QVAR 分位点 & 0.10 / 0.50 / 0.90 / 0.95 & 检查尾部状态和中位数状态下响应路径是否一致。 \\
+SMARTBoost 特征 & 完整无泄漏特征与特征组删减 & 检查市场共同状态变量对样本外预警的增量贡献。 \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item 注：所有稳健性设定均保持时间顺序切分和训练期标准化边界。
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{稳健性检验核心结论}
+\label{tab:robustness-conclusions}
+\small
+\begin{threeparttable}
+\begin{tabularx}{\textwidth}{p{0.24\textwidth}Y p{0.18\textwidth}}
+\toprule
+检验方向 & 核心结果 & 结论 \\
+\midrule
+标签阈值 & Top 5\% lift 在 H5/H10 中保持明显高于基准事件率。 & 方向稳健 \\
+RGARCH 测度 & RMAD 的 test R2LOG 为 0.030，但解释需结合测度尺度。 & 谨慎解读 \\
+QVAR 分位点 & MarketLSI 在 q=0.95 的 test pinball loss 为 0.0231，尾部响应不同于中位数关系。 & 尾部差异存在 \\
+SMARTBoost 特征组 & 排除 CrossStress 后仍保持样本外识别力，市场共同状态变量具有增量信息。 & 未发现未来信息泄漏 \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item 注：本表只报告核心方向，详细数值保留在附表材料中。
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

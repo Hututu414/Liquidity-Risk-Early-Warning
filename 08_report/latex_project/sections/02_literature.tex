@@ -1,0 +1,53 @@
+\section{文献综述}
+
+\subsection{高频市场状态、流动性压力与已实现测度}
+
+高频市场微观结构研究表明，价格、成交量和交易活跃度并不是静态结果，而是交易机制、信息到达、订单执行成本和库存约束共同作用下的动态状态。Madhavan \cite{madhavan2000survey} 对价格形成和交易机制的综述说明，交易价格中包含市场制度和信息不对称因素；Andersen 等 \cite{andersen2003realized} 进一步表明，高频收益能够为条件风险预测提供比日频数据更丰富的信息。流动性和交易活跃度本身也具有显著时变性，且会在市场下跌阶段恶化 \cite{chordia2001liquidity}；微观结构噪声与流动性特征之间的联系则提示，分钟数据中的噪声和价格冲击不能被简单视为无信息扰动 \cite{aitsahalia2009noise}。对于 A 股市场，既有综述强调交易制度、监管环境和数据可得性会影响高频研究能够观测到的流动性维度 \cite{peng2024chinamicrostructure}。
+
+就测度边界而言，订单簿深度、买卖价差和挂单恢复能力才是成交前流动性供给的直接观测。高频流动性综述和中国限价订单簿研究均表明，最丰富的真实流动性信息通常集中在报价和订单簿结构中 \cite{cobandag2022liquidityreview,gu2007bidaskchina}。相比之下，基于 OHLCV 与成交额构造的指标只能刻画成交后的市场状态。Goyenko 等 \cite{goyenko2009liquidity} 说明，代理型流动性指标可以反映部分交易成本和价格冲击维度，但不能等同于逐笔或订单簿层面的真实流动性；Corwin 和 Schultz \cite{corwin2012spread} 也显示高低价区间含有价差信息，但需要额外识别假设。因此，本文的 LSI 应被界定为短时流动性压力代理指标，而不是对真实买卖价差或订单簿深度的直接估计。
+
+已实现测度文献为本文利用分钟收益、价格振幅、波动和成交承接变量构造 LSI 提供了方法论基础。已实现波动率、双幂变差和已实现区间等研究表明，高频收益与高低价区间可以提炼局部波动、跳跃和极端价格变动信息 \cite{andersen2003realized,barndorff2004bipower,martens2007range}；CARR 模型进一步将价格区间作为条件风险递推中的核心统计量 \cite{chou2005carr}。Amihud \cite{amihud2002illiquidity} 的非流动性指标则提示，价格变化与成交额之间的相对错配可以反映价格冲击强度。基于这些文献，本文将 ILLIQ、Range、RV 和 RelAmt 合成为训练期标准化的压力代理指标，目的在于刻画短时市场压力状态，而不是宣称恢复完整的订单簿流动性。
+
+\subsection{动态风险度量、RGARCH-CARR-SK 与 QVAR 尾部传导}
+
+动态风险度量的核心思想，是将风险视为由历史冲击和历史条件状态递推而来的过程。ARCH 和 GARCH 模型奠定了用过去冲击和条件方差描述当前风险水平的基本框架 \cite{engle1982arch,bollerslev1986garch}；Realized GARCH 通过测度方程将已实现测度与潜在条件方差联系起来，使高频信息能够进入风险递推 \cite{hansen2012realizedgarch}；CARR 则将条件风险建模扩展到价格区间 \cite{chou2005carr}。这些文献共同说明，高频统计量并非只是描述性变量，也可以进入动态风险结构。
+
+在这一脉络上，Liu、Zhou 和 Chen \cite{liu2025rgarchcarrsk} 提出的 RGARCH-CARR-SK 在 realized measure 驱动的风险递推中引入动态偏度和动态峰度，使风险刻画不再局限于条件方差。本文借鉴的是这种“由高频已实现测度驱动，并允许分布形状诊断”的风险度量思想，而不是照搬原文的收益波动预测任务。本文将研究对象迁移到 MarketLSI 压力风险序列，因而 RGARCH-CARR-SK 在本文中的作用是刻画短时压力风险的阶段性聚集、动态偏度诊断和 realized pressure measure 敏感性，不是收益率预测模型。
+
+与条件均值模型相比，分位数方法更适合描述压力预警中的尾部异质性。Koenker 和 Bassett \cite{koenker1978rq} 的分位数回归为条件分位建模提供了统计基础；White、Kim 和 Manganelli \cite{white2015varforvar} 提出的多变量回归分位系统则可理解为分位数意义下的 VAR 扩展。本文据此使用 QVAR 刻画 MarketLSI、CrossStress、IndexRet、IndexRV 与 MarketRelAmt 在不同分位点下的动态联动。其解释边界必须明确：QVAR 服务于尾部分位传导和压力测试情景描述，不构成严格的结构性因果识别。
+
+\subsection{机器学习金融预警、SMARTBoost 与本文边际贡献}
+
+金融预警问题通常具有低信噪比、非线性和事件不平衡特征。危机预警和银行困境预警研究显示，能够处理非线性、交互项和不同误警--漏警权衡的机器学习方法，在样本外预警中往往优于单一线性框架 \cite{holopainen2016earlywarning,suss2019bankdistress}。本文的任务是识别未来 5 分钟和 10 分钟是否进入压力状态，本质上属于短期稀有事件预警，而不是连续型收益率预测。因此，评价重点应放在 PR-AUC、高风险组命中率、lift 和 Brier 等样本外预警指标上。
+
+在算法基础上，Friedman \cite{friedman2001gbm} 的梯度提升框架给出了逐步逼近复杂非线性函数的经典思路。Giordani、Kohns 和 Villani \cite{giordani2025smartboost} 的 SMARTBoost 则在提升学习中引入平滑加性树结构，使模型能够在结构化表格数据、噪声较高和底层函数相对平滑的场景中获得更稳定的函数近似。对于分钟级状态变量而言，短时压力往往表现为 LSI、MarketLSI、MarketRelAmt 等变量在局部阈值附近的连续累积，而不是完全离散的制度跳变；这使 SMARTBoost 的平滑加性树归纳偏好与本文任务相匹配。
+
+基于上述文献脉络，本文的边际贡献在于将分钟级 OHLCV 与成交额信息、LSI 压力代理指标、RGARCH-CARR-SK 动态风险刻画、QVAR 尾部分位传导和 SMARTBoost 样本外事件预警整合到同一研究设计中。本文不试图证明 LSI 等同于真实订单簿流动性，也不将 QVAR 情景响应解释为严格因果效应，更不把 SMARTBoost 定位为收益率预测模型；其核心问题始终是：可得的分钟级市场状态信息能否为短时流动性压力事件提供可验证、无泄漏的样本外预警。
+
+表 \ref{tab:literature-map} 将上述文献压缩为五条脉络，强调每类文献进入本文研究设计的具体用途和解释边界。
+
+\begin{table}[tbp]
+\centering
+\caption{文献脉络、代表文献与本文用途}
+\label{tab:literature-map}
+\small
+\begin{threeparttable}
+\begin{tabularx}{\textwidth}{p{0.22\textwidth}Y Y}
+\toprule
+文献脉络 & 代表文献 & 本文用途 \\
+\midrule
+高频市场微观结构与流动性测度 & Madhavan \cite{madhavan2000survey}; Chordia 等 \cite{chordia2001liquidity}; Cobandag Guloglu 和 Ekinci \cite{cobandag2022liquidityreview} & 说明分钟级价格、成交和交易活跃度包含市场状态信息，同时限定 LSI 只是压力代理指标。 \\
+已实现测度与区间风险 & Andersen 等 \cite{andersen2003realized}; Barndorff-Nielsen 和 Shephard \cite{barndorff2004bipower}; Chou \cite{chou2005carr} & 支撑使用收益、振幅和 realized measure 思想构造 LSI 与 MarketLSI 风险序列。 \\
+动态风险递推 & Engle \cite{engle1982arch}; Bollerslev \cite{bollerslev1986garch}; Hansen 等 \cite{hansen2012realizedgarch}; Liu 等 \cite{liu2025rgarchcarrsk} & 为 RGARCH-CARR-SK 迁移到 MarketLSI 压力风险提供方法依据。 \\
+尾部分位系统 & Koenker 和 Bassett \cite{koenker1978rq}; White 等 \cite{white2015varforvar} & 支撑 QVAR 对尾部分位传导和压力测试情景的描述。 \\
+机器学习预警 & Holopainen 和 Sarlin \cite{holopainen2016earlywarning}; Suss 和 Treitel \cite{suss2019bankdistress}; Friedman \cite{friedman2001gbm}; Giordani 等 \cite{giordani2025smartboost} & 支撑将任务定义为样本外压力事件预警，并使用 SMARTBoost 处理非线性与事件不平衡。 \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item 注：本表为主要文献脉络与本文使用方式，完整文献信息见文末参考文献。SMARTBoost 文献只使用已核对的可用题录信息。
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\FloatBarrier
