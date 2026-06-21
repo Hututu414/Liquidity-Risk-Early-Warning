@@ -2,6 +2,20 @@
 
 This guide explains how to run smoke and bounded onset-baseline checks in GitHub Codespaces or GitHub Actions. Do not run `full` until the prerequisites below are satisfied.
 
+## 本地轻量模式与云端重计算规则
+
+The local Windows machine is now treated as lightweight-only infrastructure:
+
+- Local work is limited to code edits, git checks, documentation, `py_compile`, data listing, dry-run checks, and very small smoke tests.
+- Do not build or merge `full80` panels locally.
+- Do not run `bounded` or `full` locally.
+- Do not run large bootstrap, all-stock model training, or full shard scans locally.
+- Run heavy recomputation only in GitHub Codespaces, GitHub Actions, or another cloud runtime.
+- Set `CLOUD_RUN=1` before cloud-side bounded/full commands so local heavy-run guards know the job is intentional.
+- In Codespaces, confirm the environment with `echo "$CODESPACES"`; it should print `true`.
+- Keep parquet, checkpoint, joblib, raw minute data, logs, and large outputs out of Git. Verify with `git check-ignore -v data/processed/onset_model_panel_full80.parquet`.
+- If the local Windows machine is unstable, never use it to `--resume` full.
+
 ## 1. Local Smoke Test
 
 Commands are shown with portable `python`; on the local Windows research machine, replace `python` with the project interpreter specified by `AGENTS.md`.
@@ -88,6 +102,25 @@ Run `full` only after:
 - You explicitly choose `mode=full` in the manual workflow.
 
 Full mode is never triggered automatically.
+
+For final full, run from cloud with:
+
+```bash
+export CLOUD_RUN=1
+
+python scripts/prepare_environment.py
+python scripts/list_required_data.py
+
+python experiments/onset_baseline_check/run_onset_baseline.py \
+  --mode full \
+  --max-stock-codes null \
+  --bootstrap 500 \
+  --threshold-quantile 0.90 \
+  --gap 5 \
+  --lookback-clean 10 \
+  --data-path data/processed/onset_model_panel_full80.parquet \
+  --resume
+```
 
 ## 6. Data Placement
 

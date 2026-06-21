@@ -2,22 +2,29 @@
 
 `data/processed/onset_model_panel.parquet` is intentionally ignored by Git. Do not commit the full model panel, raw minute data, checkpoint parquet files, or joblib model files to the repository.
 
+## 本地轻量模式与云端重计算规则
+
+- Local Windows is limited to code edits, git checks, documentation, `py_compile`, and very small smoke tests.
+- Do not build or merge `full80` panels locally.
+- Do not run `bounded` or `full` locally.
+- Do not run large bootstrap jobs or full shard scans locally.
+- Run heavy recomputation in Codespaces, GitHub Actions, or another cloud runtime.
+- Set `CLOUD_RUN=1` before cloud-side bounded/full commands.
+- Confirm Codespaces with `echo "$CODESPACES"`; it should print `true`.
+- Use `git check-ignore -v data/processed/onset_model_panel_full80.parquet` and `git status --short` before committing.
+- If local Windows is unstable, never run local `--resume` full.
+
 ## Recommended Order
 
 1. Codespaces manual upload for bounded or full runs.
 2. Private URL or release asset download for GitHub Actions bounded runs.
-3. Local or Codespaces-only real experiments, with GitHub Actions used only for smoke checks.
+3. Codespaces-only or Actions-based real experiments, with local Windows used only for lightweight checks.
 
 ## Scheme A: Codespaces Manual Upload
 
 Use this for bounded and full runs when data is private or large.
 
-1. Build the panel locally:
-
-```bash
-python scripts/build_onset_model_panel.py --output data/processed/onset_model_panel.parquet
-```
-
+1. Obtain the panel from a cloud-side build, private artifact, or trusted manual upload source.
 2. Do not commit the parquet file.
 3. Open GitHub Codespaces for the repository.
 4. Upload the parquet file into:
@@ -26,9 +33,10 @@ python scripts/build_onset_model_panel.py --output data/processed/onset_model_pa
 data/processed/onset_model_panel.parquet
 ```
 
-5. In Codespaces, run bounded only after smoke checks pass:
+5. In Codespaces, mark the job as cloud-side and run bounded only after smoke checks pass:
 
 ```bash
+export CLOUD_RUN=1
 python scripts/prepare_environment.py
 python scripts/list_required_data.py
 python experiments/onset_baseline_check/run_onset_baseline.py --mode bounded --max-stock-codes 20 --bootstrap 200 --data-path data/processed/onset_model_panel.parquet --resume
@@ -72,7 +80,7 @@ Use this when data is too large or too sensitive for GitHub-hosted runners.
 In this scheme:
 
 - GitHub Actions runs only environment checks, data-contract scanning, py_compile, and optional smoke behavior.
-- Real bounded and full experiments run locally or in Codespaces after the panel has been manually uploaded.
+- Real bounded and full experiments run in Codespaces or another cloud runtime after the panel has been uploaded.
 - This is the most conservative data-security option.
 
 ## Safety Notes

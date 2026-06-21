@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -52,10 +54,87 @@ FORBIDDEN_PARTS = (
     "Y_onset",
 )
 
+LOCAL_HEAVY_REFUSAL = (
+    "本地电脑已设置为轻量模式。当前命令属于重计算任务，已拒绝在本地运行。\n"
+    "请在 GitHub Codespaces 或 GitHub Actions 中运行该任务。\n"
+    "如确认是在云端环境，请设置环境变量 CLOUD_RUN=1。"
+)
+
 
 def project_path(path: Path | str) -> Path:
     value = Path(path)
     return value if value.is_absolute() else ROOT / value
+
+
+def cloud_run_enabled() -> bool:
+    return (
+        os.environ.get("CLOUD_RUN") == "1"
+        or os.environ.get("CODESPACES", "").lower() == "true"
+        or os.environ.get("GITHUB_ACTIONS", "").lower() == "true"
+    )
+
+
+def local_windows_light_mode() -> bool:
+    return sys.platform.startswith("win") and not cloud_run_enabled()
+
+
+def local_heavy_override_confirmed(allow_local_heavy: bool) -> bool:
+    if not allow_local_heavy:
+        return False
+    print("WARNING: --allow-local-heavy was requested on a local Windows machine.")
+    print("This may crash or restart the local computer. Prefer Codespaces or GitHub Actions.")
+    if not sys.stdin.isatty():
+        print("Refusing override because no interactive confirmation is available.")
+        return False
+    reply = input("Type ALLOW_LOCAL_HEAVY to continue: ").strip()
+    return reply == "ALLOW_LOCAL_HEAVY"
+
+
+def same_project_path(left: Path, right: Path) -> bool:
+    try:
+        return project_path(left).resolve() == project_path(right).resolve()
+    except OSError:
+        return project_path(left).absolute() == project_path(right).absolute()
+
+
+def local_heavy_reasons(output: Path, max_stock_codes: int | None, dry_run: bool) -> list[str]:
+    if dry_run:
+        return []
+    reasons: list[str] = []
+    output_text = str(output).replace("\\", "/").lower()
+    if "full80" in output_text:
+        reasons.append("output file name contains full80")
+    if same_project_path(output, DEFAULT_OUTPUT):
+        reasons.append("output path is data/processed/onset_model_panel.parquet")
+    if max_stock_codes is None:
+        reasons.append("output parquet would be generated from all eligible stock shards")
+    elif int(max_stock_codes) > 5:
+        reasons.append(f"--max-stock-codes {max_stock_codes} > 5")
+    return reasons
+
+
+def enforce_local_light_mode(output: Path, max_stock_codes: int | None, dry_run: bool, allow_local_heavy: bool) -> bool:
+    if not local_windows_light_mode():
+        return True
+    reasons = local_heavy_reasons(output, max_stock_codes, dry_run)
+    if not reasons:
+        return True
+    if local_heavy_override_confirmed(allow_local_heavy):
+        print("WARNING: local heavy-run guard overridden after explicit confirmation.")
+        return True
+    print(LOCAL_HEAVY_REFUSAL)
+    print("Refusal reasons:")
+    for reason in reasons:
+        print(f"- {reason}")
+    return False
+
+
+def parse_bool(value: Any) -> bool:
+    if isinstance(value, bool):
+        return value
+    if value is None or pd.isna(value):
+        return False
+    return str(value).strip().lower() in {"1", "true", "yes", "y"}
 
 
 def parquet_columns(path: Path) -> list[str]:
@@ -124,25 +203,38 @@ def contract_missing(columns: list[str]) -> list[str]:
     return [name for name, aliases in groups.items() if available.isdisjoint(aliases)]
 
 
-def candidate_files() -> list[Path]:
+def candidate_records() -> list[dict[str, Any]]:
     manifest_path = ROOT / MANIFEST
     if manifest_path.exists():
         manifest = pd.read_csv(manifest_path)
-        paths = []
-        for raw in manifest.get("output_path", pd.Series(dtype="object")).dropna().astype(str):
+        records: list[dict[str, Any]] = []
+        for _, row in manifest.iterrows():
+            raw = row.get("output_path")
+            if pd.isna(raw):
+                continue
             path = project_path(raw)
             if path.exists() and path.suffix.lower() == ".parquet":
-                paths.append(path)
-        preferred = [p for p in paths if "lsi_labels_by_code" in str(p)]
+                records.append(
+                    {
+                        "path": path,
+                        "code": str(row.get("code", "")),
+                        "is_index": parse_bool(row.get("is_index", False)),
+                    }
+                )
+        preferred = [r for r in records if "lsi_labels_by_code" in str(r["path"])]
         if preferred:
             return preferred
-        return paths
+        return records
     roots = [ROOT / "data_intermediate", ROOT / "data_inbox", ROOT / "outputs", ROOT / "experiments"]
-    files: list[Path] = []
+    records = []
     for base in roots:
         if base.exists():
-            files.extend(base.rglob("*.parquet"))
-    return sorted(files)
+            records.extend({"path": path, "code": "", "is_index": False} for path in base.rglob("*.parquet"))
+    return sorted(records, key=lambda r: str(r["path"]))
+
+
+def candidate_files() -> list[Path]:
+    return [record["path"] for record in candidate_records()]
 
 
 def inspect_candidates(limit: int = 80) -> list[dict[str, Any]]:
@@ -166,9 +258,25 @@ def inspect_candidates(limit: int = 80) -> list[dict[str, Any]]:
 
 
 def build_panel(max_stock_codes: int | None) -> tuple[pd.DataFrame, dict[str, Any]]:
-    files = [p for p in candidate_files() if not contract_missing(parquet_columns(p))]
+    eligible: list[dict[str, Any]] = []
+    seen_codes: set[str] = set()
+    skipped_index = 0
+    for record in candidate_records():
+        path = record["path"]
+        if contract_missing(parquet_columns(path)):
+            continue
+        if parse_bool(record.get("is_index", False)):
+            skipped_index += 1
+            continue
+        code = str(record.get("code") or path.stem)
+        if code in seen_codes:
+            continue
+        seen_codes.add(code)
+        eligible.append({**record, "code": code})
+    files = [record["path"] for record in eligible]
     if max_stock_codes is not None:
         files = files[:max_stock_codes]
+        eligible = eligible[:max_stock_codes]
     if not files:
         inspected = inspect_candidates()
         searched = sorted({str(p.parent.relative_to(ROOT)) for p in candidate_files()[:20]})
@@ -192,7 +300,9 @@ def build_panel(max_stock_codes: int | None) -> tuple[pd.DataFrame, dict[str, An
     panel = panel.sort_values(["code", "date", "datetime"] if "datetime" in panel else ["code", "date"]).reset_index(drop=True)
     profile = {
         "source_files": [str(p.relative_to(ROOT)) for p in files],
+        "source_stock_codes": [str(record["code"]) for record in eligible],
         "source_file_count": len(files),
+        "skipped_index_source_files": skipped_index,
         "retained_columns": list(panel.columns),
         "excluded_columns": excluded,
         "rows": int(len(panel)),
@@ -208,8 +318,9 @@ def write_profile(output: Path, profile: dict[str, Any], dry_run: bool) -> None:
     output_abs = project_path(output)
     out_dir = output_abs.parent
     out_dir.mkdir(parents=True, exist_ok=True)
-    schema_path = out_dir / "onset_model_panel_schema.json"
-    profile_path = out_dir / "onset_model_panel_profile.md"
+    stem = output_abs.stem
+    schema_path = out_dir / f"{stem}_schema.json"
+    profile_path = out_dir / f"{stem}_profile.md"
     write_schema = {
         "dry_run": dry_run,
         "output": str(output),
@@ -229,6 +340,11 @@ def write_profile(output: Path, profile: dict[str, Any], dry_run: bool) -> None:
         f"- date_min: {profile.get('date_min')}",
         f"- date_max: {profile.get('date_max')}",
         f"- source_file_count: {profile.get('source_file_count')}",
+        f"- skipped_index_source_files: {profile.get('skipped_index_source_files')}",
+        "",
+        "## Source Stock Codes",
+        "",
+        *(f"- {c}" for c in profile.get("source_stock_codes", [])),
         "",
         "## Retained Columns",
         "",
@@ -246,9 +362,16 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--max-stock-codes", type=int, default=None)
     parser.add_argument("--output", default=str(DEFAULT_OUTPUT))
+    parser.add_argument(
+        "--allow-local-heavy",
+        action="store_true",
+        help="Override the local Windows heavy-run guard after an interactive confirmation.",
+    )
     args = parser.parse_args()
 
     output = Path(args.output)
+    if not enforce_local_light_mode(output, args.max_stock_codes, args.dry_run, args.allow_local_heavy):
+        return 2
     try:
         effective_max = args.max_stock_codes
         if args.dry_run and effective_max is None:

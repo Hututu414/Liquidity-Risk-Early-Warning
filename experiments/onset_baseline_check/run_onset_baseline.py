@@ -18,7 +18,7 @@ from typing import Any
 import matplotlib
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt
+plt: Any | None = None
 import numpy as np
 import pandas as pd
 import yaml
@@ -32,6 +32,15 @@ from sklearn.preprocessing import StandardScaler
 
 LGBMClassifier: Any | None = None
 LIGHTGBM_AVAILABLE: bool | None = None
+
+
+def get_plt() -> Any:
+    global plt
+    if plt is None:
+        import matplotlib.pyplot as _plt
+
+        plt = _plt
+    return plt
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -114,7 +123,78 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--dry-run", action="store_true", help="Validate configuration and data presence without fitting models.")
     parser.add_argument("--config", default=str(CONFIG_PATH), help="Path to the YAML configuration file.")
     parser.add_argument("--data-path", default=None, help="Optional modeling panel parquet path.")
+    parser.add_argument(
+        "--allow-local-heavy",
+        action="store_true",
+        help="Override the local Windows heavy-run guard after an interactive confirmation.",
+    )
     return parser.parse_args(argv)
+
+
+LOCAL_HEAVY_REFUSAL = (
+    "本地电脑已设置为轻量模式。当前命令属于重计算任务，已拒绝在本地运行。\n"
+    "请在 GitHub Codespaces 或 GitHub Actions 中运行该任务。\n"
+    "如确认是在云端环境，请设置环境变量 CLOUD_RUN=1。"
+)
+
+
+def cloud_run_enabled() -> bool:
+    return (
+        os.environ.get("CLOUD_RUN") == "1"
+        or os.environ.get("CODESPACES", "").lower() == "true"
+        or os.environ.get("GITHUB_ACTIONS", "").lower() == "true"
+    )
+
+
+def local_windows_light_mode() -> bool:
+    return sys.platform.startswith("win") and not cloud_run_enabled()
+
+
+def local_heavy_override_confirmed(args: argparse.Namespace) -> bool:
+    if not getattr(args, "allow_local_heavy", False):
+        return False
+    print("WARNING: --allow-local-heavy was requested on a local Windows machine.")
+    print("This may crash or restart the local computer. Prefer Codespaces or GitHub Actions.")
+    if not sys.stdin.isatty():
+        print("Refusing override because no interactive confirmation is available.")
+        return False
+    reply = input("Type ALLOW_LOCAL_HEAVY to continue: ").strip()
+    return reply == "ALLOW_LOCAL_HEAVY"
+
+
+def local_heavy_reasons(config: dict[str, Any]) -> list[str]:
+    reasons: list[str] = []
+    mode = str(config.get("run_mode", ""))
+    max_codes = config.get("sampling", {}).get("max_stock_codes")
+    bootstrap = int(config.get("bootstrap", {}).get("iterations", 0))
+    data_path = str(config.get("paths", {}).get("data_path", "") or "")
+    if mode in {"bounded", "full"}:
+        reasons.append(f"--mode {mode}")
+    if max_codes is None:
+        reasons.append("--max-stock-codes null")
+    elif int(max_codes) > 5:
+        reasons.append(f"--max-stock-codes {max_codes} > 5")
+    if bootstrap > 20:
+        reasons.append(f"--bootstrap {bootstrap} > local smoke cap 20")
+    if "full80" in data_path.lower():
+        reasons.append("data path contains full80")
+    return reasons
+
+
+def enforce_local_light_mode(config: dict[str, Any], args: argparse.Namespace) -> bool:
+    if not local_windows_light_mode():
+        return True
+    reasons = local_heavy_reasons(config)
+    if not reasons:
+        return True
+    if local_heavy_override_confirmed(args):
+        print("WARNING: local heavy-run guard overridden after explicit confirmation.")
+        return True
+    print(LOCAL_HEAVY_REFUSAL)
+    print("Refusal reasons:")
+    for reason in reasons:
+        print(f"- {reason}")
+    return False
 
 
 def parse_nullable_int(value: Any) -> int | None:
@@ -422,7 +502,8 @@ def apply_stock_code_cap(manifest: pd.DataFrame, config: dict[str, Any], log: li
 
 
 def setup_style(dpi: int) -> None:
-    plt.rcParams.update(
+    plot = get_plt()
+    plot.rcParams.update(
         {
             "figure.dpi": dpi,
             "savefig.dpi": dpi,
@@ -699,6 +780,83 @@ def future_window_any(series: pd.Series, gap: int, horizon: int) -> tuple[pd.Ser
     return values.max(axis=1), values.notna().sum(axis=1)
 
 
+def iter_contiguous_code_date_positions(df: pd.DataFrame) -> list[tuple[int, int]]:
+    n = len(df)
+    if n == 0:
+        return []
+    code_values = df["code"].to_numpy(dtype=object, copy=False)
+    date_values = df["date"].to_numpy(dtype=object, copy=False)
+    group_start = np.ones(n, dtype=bool)
+    group_start[1:] = (code_values[1:] != code_values[:-1]) | (date_values[1:] != date_values[:-1])
+    starts = np.flatnonzero(group_start)
+    stops = np.empty_like(starts)
+    stops[:-1] = starts[1:]
+    stops[-1] = n
+    return list(zip(starts.tolist(), stops.tolist()))
+
+
+def grouped_shift(values: np.ndarray, groups: list[tuple[int, int]], lag: int) -> np.ndarray:
+    out = np.full(values.size, np.nan, dtype="float32")
+    lag = int(lag)
+    if lag <= 0:
+        return values.astype("float32", copy=True)
+    for start, stop in groups:
+        if stop - start > lag:
+            out[start + lag : stop] = values[start : stop - lag]
+    return out
+
+
+def grouped_rolling(values: np.ndarray, groups: list[tuple[int, int]], window: int, op: str) -> np.ndarray:
+    out = np.full(values.size, np.nan, dtype="float32")
+    window = int(window)
+    if window <= 0:
+        return out
+    finite = np.isfinite(values)
+    clean = np.where(finite, values, 0.0)
+    for start, stop in groups:
+        vals = clean[start:stop]
+        ok = finite[start:stop].astype("int32")
+        if vals.size == 0:
+            continue
+        if op in {"sum", "mean"}:
+            csum = np.concatenate(([0.0], np.cumsum(vals, dtype="float64")))
+            ccnt = np.concatenate(([0], np.cumsum(ok, dtype="int32")))
+            local_idx = np.arange(vals.size)
+            left = np.maximum(0, local_idx - window + 1)
+            total = csum[local_idx + 1] - csum[left]
+            count = ccnt[local_idx + 1] - ccnt[left]
+            if op == "sum":
+                segment = np.where(count > 0, total, np.nan)
+            else:
+                segment = np.full(vals.size, np.nan, dtype="float64")
+                np.divide(total, count, out=segment, where=count > 0)
+            out[start:stop] = segment.astype("float32")
+        elif op == "max":
+            segment = np.full(vals.size, np.nan, dtype="float32")
+            raw = values[start:stop]
+            for i in range(vals.size):
+                left = max(0, i - window + 1)
+                chunk = raw[left : i + 1]
+                if np.isfinite(chunk).any():
+                    segment[i] = float(np.nanmax(chunk))
+            out[start:stop] = segment
+        else:
+            raise ValueError(f"Unsupported rolling op: {op}")
+    return out
+
+
+def grouped_cumsum(values: np.ndarray, groups: list[tuple[int, int]]) -> np.ndarray:
+    out = np.full(values.size, np.nan, dtype="float32")
+    for start, stop in groups:
+        segment = values[start:stop]
+        running = 0.0
+        for offset, value in enumerate(segment):
+            if np.isfinite(value):
+                running += float(value)
+                out[start + offset] = running
+    return out
+
+
 def make_onset_label(df: pd.DataFrame, threshold: float, gap: int, horizon: int, lookback_clean: int) -> pd.Series:
     threshold = float(threshold)
     gap = int(gap)
@@ -726,8 +884,8 @@ def make_onset_label(df: pd.DataFrame, threshold: float, gap: int, horizon: int,
         return out
 
     lsi_all = pd.to_numeric(df["LSI_5"], errors="coerce").to_numpy(dtype="float64")
-    for _, positions in df.groupby(["code", "date"], sort=False).indices.items():
-        idx = np.asarray(positions, dtype=np.intp)
+    for start, stop in iter_contiguous_code_date_positions(df):
+        idx = np.arange(start, stop, dtype=np.intp)
         lsi = lsi_all[idx]
         observed = np.isfinite(lsi)
         pressure = observed & (lsi >= threshold)
@@ -889,29 +1047,29 @@ def prepare_shard(
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
 
-    by_day = df.groupby(["code", "date"], sort=False)
+    day_groups = iter_contiguous_code_date_positions(df)
+    lsi5_values = df["LSI_5"].to_numpy(dtype="float64", copy=False)
     for lag in [1, 2, 5]:
-        df[f"LSI_5_lag{lag}"] = by_day["LSI_5"].shift(lag)
+        df[f"LSI_5_lag{lag}"] = grouped_shift(lsi5_values, day_groups, lag)
     for col in ["LSI_10", "LSI_20"]:
-        df[f"{col}_lag1"] = by_day[col].shift(1)
+        df[f"{col}_lag1"] = grouped_shift(df[col].to_numpy(dtype="float64", copy=False), day_groups, 1)
     for window in [5, 10, 20]:
-        df[f"LSI_5_rollmean_{window}"] = (
-            by_day["LSI_5"].rolling(window, min_periods=1).mean().reset_index(level=[0, 1], drop=True)
-        )
-        df[f"LSI_5_rollmax_{window}"] = (
-            by_day["LSI_5"].rolling(window, min_periods=1).max().reset_index(level=[0, 1], drop=True)
-        )
-        df[f"ret_sum_{window}"] = (
-            by_day["ret_1m"].rolling(window, min_periods=1).sum().reset_index(level=[0, 1], drop=True)
+        df[f"LSI_5_rollmean_{window}"] = grouped_rolling(lsi5_values, day_groups, window, "mean")
+        df[f"LSI_5_rollmax_{window}"] = grouped_rolling(lsi5_values, day_groups, window, "max")
+        df[f"ret_sum_{window}"] = grouped_rolling(
+            df["ret_1m"].to_numpy(dtype="float64", copy=False), day_groups, window, "sum"
         )
     for col in MARKET_BASE:
-        df[f"{col}_lag1"] = by_day[col].shift(1)
-        df[f"{col}_rollmean_10"] = by_day[col].rolling(10, min_periods=1).mean().reset_index(level=[0, 1], drop=True)
+        values = df[col].to_numpy(dtype="float64", copy=False)
+        df[f"{col}_lag1"] = grouped_shift(values, day_groups, 1)
+        df[f"{col}_rollmean_10"] = grouped_rolling(values, day_groups, 10, "mean")
         if col in {"MarketLSI", "MarketRelAmt", "IndexRV"}:
-            df[f"{col}_rollmax_20"] = by_day[col].rolling(20, min_periods=1).max().reset_index(level=[0, 1], drop=True)
+            df[f"{col}_rollmax_20"] = grouped_rolling(values, day_groups, 20, "max")
 
-    df["cum_ret_open"] = by_day["ret_1m"].cumsum()
-    df["cum_amount_log_so_far"] = np.log1p(by_day["amount"].cumsum().clip(lower=0))
+    ret_cumsum = grouped_cumsum(df["ret_1m"].to_numpy(dtype="float64", copy=False), day_groups)
+    amount_cumsum = grouped_cumsum(df["amount"].to_numpy(dtype="float64", copy=False), day_groups)
+    df["cum_ret_open"] = ret_cumsum
+    df["cum_amount_log_so_far"] = np.log1p(np.clip(amount_cumsum, a_min=0, a_max=None))
     slot = pd.to_numeric(df["slot"], errors="coerce").astype("float64")
     df["slot_sin"] = np.sin(2.0 * np.pi * slot / 240.0)
     df["slot_cos"] = np.cos(2.0 * np.pi * slot / 240.0)
@@ -1603,13 +1761,14 @@ def save_dual(fig: plt.Figure, path_png: Path, save_pdf: bool) -> None:
     fig.savefig(path_png, dpi=300)
     if save_pdf:
         fig.savefig(path_png.with_suffix(".pdf"))
-    plt.close(fig)
+    get_plt().close(fig)
 
 
 def plot_pr_curves(cache: dict[tuple[int, str, str], dict[str, np.ndarray]], best: pd.DataFrame, out_dir: Path, save_pdf: bool) -> None:
     c = colors()
     model_colors = {"Naive": c["baseline"], "Logit": c["primary"], "LightGBM": c["positive"], "SMARTBoost": c["negative"]}
-    fig, axes = plt.subplots(1, 2, figsize=(10.0, 4.5), constrained_layout=True)
+    plot_lib = get_plt()
+    fig, axes = plot_lib.subplots(1, 2, figsize=(10.0, 4.5), constrained_layout=True)
     for ax, horizon in zip(axes, HORIZONS):
         plotted = set()
         key = (horizon, "P", "Naive")
@@ -1672,7 +1831,8 @@ def plot_topk_lift(metrics: pd.DataFrame, best: pd.DataFrame, out_dir: Path, sav
                 }
             )
     plot = pd.DataFrame(rows)
-    fig, ax = plt.subplots(figsize=(7.0, 4.0), constrained_layout=True)
+    plot_lib = get_plt()
+    fig, ax = plot_lib.subplots(figsize=(7.0, 4.0), constrained_layout=True)
     if not plot.empty:
         x = np.arange(len(TOP_FRACS))
         width = 0.18
@@ -1754,7 +1914,8 @@ def plot_feature_importance(
             else:
                 importance["share"] = 0.0
             group_contrib = importance.groupby("category", as_index=False)["share"].sum().sort_values("share", ascending=False)
-    fig, ax = plt.subplots(figsize=(7.0, 5.0), constrained_layout=True)
+    plot_lib = get_plt()
+    fig, ax = plot_lib.subplots(figsize=(7.0, 5.0), constrained_layout=True)
     if not importance.empty:
         plot = importance.sort_values("importance", ascending=False).head(20).sort_values("importance", ascending=True)
         cat_colors = {
@@ -1772,7 +1933,7 @@ def plot_feature_importance(
             linewidth=0.4,
         )
         handles = [
-            plt.Line2D([0], [0], color=color, lw=4, label=label)
+            plot_lib.Line2D([0], [0], color=color, lw=4, label=label)
             for label, color in [
                 ("Persistence", cat_colors["persistence"]),
                 ("Market", cat_colors["market"]),
@@ -1997,6 +2158,62 @@ def event_level_metrics(event_pred: pd.DataFrame, config: dict[str, Any]) -> pd.
             }
         )
     return pd.DataFrame(rows)
+
+
+def run_corrected_event_recompute(config: dict[str, Any], output_dir: Path, log: list[str]) -> list[Path]:
+    if config.get("run_mode") != "full":
+        return []
+    script_path = PROJECT_ROOT / "scripts" / "recompute_event_metrics.py"
+    if not script_path.exists():
+        raise FileNotFoundError(f"Corrected event recompute script is missing: {script_path}")
+    data_path = config.get("paths", {}).get("data_path")
+    if not data_path:
+        raise RuntimeError("Corrected event recompute requires config.paths.data_path")
+    cmd = [
+        sys.executable,
+        str(script_path),
+        "--data-path",
+        str(data_path),
+        "--predictions-dir",
+        str(output_dir.parent / "checkpoints"),
+        "--outputs-dir",
+        str(output_dir),
+        "--mode",
+        "full",
+        "--bootstrap",
+        str(int(config["bootstrap"]["iterations"])),
+        "--threshold-quantile",
+        str(float(config["main_label"]["threshold_quantile"])),
+        "--gap",
+        str(int(config["main_label"]["gap"])),
+        "--lookback-clean",
+        str(int(config["main_label"]["lookback_clean"])),
+        "--budgeted",
+    ]
+    log_line(log, "Running corrected and budgeted event-level recompute for final full.")
+    proc = subprocess.run(cmd, cwd=PROJECT_ROOT, text=True, capture_output=True)
+    stdout_path = output_dir / "corrected_event_recompute_stdout.txt"
+    stderr_path = output_dir / "corrected_event_recompute_stderr.txt"
+    write_text(stdout_path, proc.stdout or "")
+    write_text(stderr_path, proc.stderr or "")
+    if proc.stdout:
+        log.extend(proc.stdout.splitlines())
+    if proc.stderr:
+        log.extend(proc.stderr.splitlines()[-80:])
+    if proc.returncode != 0:
+        raise RuntimeError(f"Corrected event recompute failed with exit code {proc.returncode}; see {rel(stderr_path)}")
+    expected = [
+        output_dir / "event_level_metrics_revised.csv",
+        output_dir / "event_level_metrics_revised.md",
+        output_dir / "event_level_audit_report_final_full.md",
+        output_dir / "final_full_event_revised_digest.md",
+        output_dir / "budgeted_event_metrics.csv",
+        output_dir / "budgeted_event_metrics.md",
+        output_dir / "budgeted_event_metrics_final_digest.md",
+        stdout_path,
+        stderr_path,
+    ]
+    return [path for path in expected if path.exists()]
 
 
 def format_pct(x: Any) -> str:
@@ -2882,6 +3099,8 @@ def run(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     started_at = datetime.now()
     config = apply_run_mode(load_config(args.config), args)
+    if not enforce_local_light_mode(config, args):
+        return 2
     output_dir = PROJECT_ROOT / config["paths"]["output_dir"]
     output_dir.mkdir(parents=True, exist_ok=True)
     (output_dir.parent / "logs").mkdir(parents=True, exist_ok=True)
@@ -3088,6 +3307,9 @@ def run(argv: list[str] | None = None) -> int:
             path = output_dir / name
             df.to_csv(path, index=False, encoding="utf-8-sig", float_format="%.6f")
             generated.append(path)
+
+        generated.extend(run_corrected_event_recompute(config, output_dir, log))
+        flush_log(output_dir, log)
 
         generated.extend(
             [output_dir / "fig_pr_curves_onset.png", output_dir / "fig_topk_lift_onset.png", output_dir / "fig_feature_importance_onset.png"]

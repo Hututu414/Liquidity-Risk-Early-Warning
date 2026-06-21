@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -21,6 +22,24 @@ REQUIRED_GROUPS = {
     "IndexRV": {"IndexRV", "index_rv"},
     "MarketRelAmt": {"MarketRelAmt", "market_rel_amt"},
 }
+FORBIDDEN_PARTS = (
+    "future",
+    "lead",
+    "target",
+    "label",
+    "max_future",
+    "forward",
+    "FutureMax",
+    "CrossStress",
+    "Y_onset",
+)
+ALLOWED_LABEL_COLUMNS = {"Stress_H5", "Stress_H10"}
+
+LOCAL_HEAVY_REFUSAL = (
+    "本地电脑已设置为轻量模式。当前命令属于重计算任务，已拒绝在本地运行。\n"
+    "请在 GitHub Codespaces 或 GitHub Actions 中运行该任务。\n"
+    "如确认是在云端环境，请设置环境变量 CLOUD_RUN=1。"
+)
 
 
 def project_path(path: Path | str) -> Path:
@@ -28,8 +47,94 @@ def project_path(path: Path | str) -> Path:
     return value if value.is_absolute() else ROOT / value
 
 
+def cloud_run_enabled() -> bool:
+    return (
+        os.environ.get("CLOUD_RUN") == "1"
+        or os.environ.get("CODESPACES", "").lower() == "true"
+        or os.environ.get("GITHUB_ACTIONS", "").lower() == "true"
+    )
+
+
+def local_windows_light_mode() -> bool:
+    return sys.platform.startswith("win") and not cloud_run_enabled()
+
+
+def local_heavy_override_confirmed(allow_local_heavy: bool) -> bool:
+    if not allow_local_heavy:
+        return False
+    print("WARNING: --allow-local-heavy was requested on a local Windows machine.")
+    print("This may crash or restart the local computer. Prefer Codespaces or GitHub Actions.")
+    if not sys.stdin.isatty():
+        print("Refusing override because no interactive confirmation is available.")
+        return False
+    reply = input("Type ALLOW_LOCAL_HEAVY to continue: ").strip()
+    return reply == "ALLOW_LOCAL_HEAVY"
+
+
+def same_project_path(left: Path, right: Path) -> bool:
+    try:
+        return project_path(left).resolve() == project_path(right).resolve()
+    except OSError:
+        return project_path(left).absolute() == project_path(right).absolute()
+
+
+def local_heavy_reasons(panel: Path, execute: bool) -> list[str]:
+    reasons: list[str] = []
+    panel_text = str(panel).replace("\\", "/").lower()
+    if execute:
+        reasons.append("--execute would run bounded")
+    if "full80" in panel_text:
+        reasons.append("data path contains full80")
+    if same_project_path(panel, DEFAULT_PANEL):
+        reasons.append("data path is data/processed/onset_model_panel.parquet")
+    return reasons
+
+
+def enforce_local_light_mode(panel: Path, execute: bool, allow_local_heavy: bool) -> bool:
+    if not local_windows_light_mode():
+        return True
+    reasons = local_heavy_reasons(panel, execute)
+    if not reasons:
+        return True
+    if local_heavy_override_confirmed(allow_local_heavy):
+        print("WARNING: local heavy-run guard overridden after explicit confirmation.")
+        return True
+    print(LOCAL_HEAVY_REFUSAL)
+    print("Refusal reasons:")
+    for reason in reasons:
+        print(f"- {reason}")
+    return False
+
+
+def pick_column(columns: list[str], aliases: set[str]) -> str | None:
+    for col in columns:
+        if col in aliases:
+            return col
+    return None
+
+
+def parse_bool(value: Any) -> bool:
+    if isinstance(value, bool):
+        return value
+    if value is None:
+        return False
+    return str(value).strip().lower() in {"1", "true", "yes", "y"}
+
+
+def future_information_columns(columns: list[str]) -> list[str]:
+    flagged = []
+    for col in columns:
+        if col in ALLOWED_LABEL_COLUMNS:
+            continue
+        lower = col.lower()
+        if any(part.lower() in lower for part in FORBIDDEN_PARTS):
+            flagged.append(col)
+    return flagged
+
+
 def parquet_info(path: Path) -> dict[str, Any]:
     import pyarrow.parquet as pq
+    import pandas as pd
 
     pf = pq.ParquetFile(path)
     columns = list(pf.schema.names)
@@ -39,9 +144,36 @@ def parquet_info(path: Path) -> dict[str, Any]:
         for group, aliases in REQUIRED_GROUPS.items()
         if available.isdisjoint(aliases)
     ]
+    code_col = pick_column(columns, REQUIRED_GROUPS["code"])
+    date_col = pick_column(columns, REQUIRED_GROUPS["date"])
+    read_cols = [c for c in [code_col, date_col, "is_index"] if c is not None and c in columns]
+    stock_count: int | None = None
+    date_min: str | None = None
+    date_max: str | None = None
+    if read_cols:
+        meta = pd.read_parquet(path, columns=read_cols)
+        if code_col and code_col != "code":
+            meta = meta.rename(columns={code_col: "code"})
+        if date_col and date_col != "date":
+            meta = meta.rename(columns={date_col: "date"})
+        if "is_index" not in meta.columns:
+            meta["is_index"] = False
+        if "code" in meta.columns:
+            non_index = meta.loc[~meta["is_index"].map(parse_bool)]
+            stock_count = int(non_index["code"].astype(str).nunique())
+        if "date" in meta.columns and len(meta):
+            dates = pd.to_datetime(meta["date"], errors="coerce")
+            if dates.notna().any():
+                date_min = str(dates.min().date())
+                date_max = str(dates.max().date())
+    future_cols = future_information_columns(columns)
     return {
         "rows": int(pf.metadata.num_rows),
         "columns": len(columns),
+        "stock_count": stock_count,
+        "date_min": date_min,
+        "date_max": date_max,
+        "future_information_columns": future_cols,
         "missing_required_groups": missing,
         "satisfies_contract": not missing,
     }
@@ -73,9 +205,16 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Check bounded onset cloud readiness without running bounded by default.")
     parser.add_argument("--data-path", default=str(DEFAULT_PANEL), help="Model-panel parquet path.")
     parser.add_argument("--execute", action="store_true", help="Actually run the bounded command.")
+    parser.add_argument(
+        "--allow-local-heavy",
+        action="store_true",
+        help="Override the local Windows heavy-run guard after an interactive confirmation.",
+    )
     args = parser.parse_args()
 
     panel = Path(args.data_path)
+    if not enforce_local_light_mode(panel, bool(args.execute), bool(args.allow_local_heavy)):
+        return 2
     panel_abs = project_path(panel)
     manifest_abs = project_path(CHECKPOINT_MANIFEST)
     print(f"Panel path: {panel}")
@@ -97,6 +236,9 @@ def main() -> int:
     print(" ".join(command))
     if not info["satisfies_contract"]:
         print("Bounded is not ready: panel contract is incomplete.")
+        return 2
+    if info["future_information_columns"]:
+        print("Bounded is not ready: future-information columns are present.")
         return 2
     if not args.execute:
         print("Dry check only. Re-run with --execute to run bounded.")
