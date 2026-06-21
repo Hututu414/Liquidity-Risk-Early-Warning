@@ -1,20 +1,73 @@
-# data and generated outputs
-*.parquet
-*.feather
-*.h5
-*.hdf5
-*.pickle
-*.pkl
-*.csv
-*.xlsx
-*.log
+# Python/runtime caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+env/
+.env
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/settings.json
+
+# Large raw or intermediate data should not be committed to GitHub
+data/raw/
+data/processed/**/*.parquet
+data/processed/**/*.feather
+data/processed/**/*.pkl
+data/processed/**/*.pickle
+data/processed/**/*.joblib
+data/processed/**/*.npy
+data/processed/**/*.npz
+data_inbox/raw/
+data_inbox/preprocessed/panel/**/*.parquet
+data_inbox/preprocessed/panel/**/*.csv
+data_inbox/preprocessed/panel/**/*.csv.gz
+data_inbox/preprocessed/quality/*.csv
+data_intermediate/**/*.parquet
+data_intermediate/**/*.feather
+data_intermediate/**/*.pkl
+data_intermediate/**/*.pickle
+data_intermediate/**/*.joblib
+data_intermediate/**/*.csv
+data_intermediate/**/*.json
+
+# Large model/checkpoint binaries; small JSON checkpoint markers are allowed
+experiments/**/checkpoints/**/*.parquet
+experiments/**/checkpoints/**/*.feather
+experiments/**/checkpoints/**/*.pkl
+experiments/**/checkpoints/**/*.pickle
+experiments/**/checkpoints/**/*.joblib
+experiments/**/checkpoints/**/*.npy
+experiments/**/checkpoints/**/*.npz
+
+# Local run process files and logs; GitHub Actions uploads them as artifacts
+experiments/**/logs/*.log
+experiments/**/outputs/process_stdout.txt
+experiments/**/outputs/process_stderr.txt
+experiments/**/outputs/process.pid
+pipeline_logs/
+*.tmp
+
+# LaTeX build byproducts, not source files or final PDFs
 *.aux
 *.bbl
 *.blg
 *.fdb_latexmk
 *.fls
 *.synctex.gz
-__pycache__/
-.venv/
-.git/
-.DS_Store
+*.toc
+*.out
+*.lof
+*.lot
+
+# Keep small result CSV/Markdown reports and paper-ready figures trackable.

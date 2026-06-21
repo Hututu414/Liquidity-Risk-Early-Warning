@@ -1,0 +1,141 @@
+name: Onset baseline
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Run mode"
+        type: choice
+        required: true
+        default: bounded
+        options: [smoke, bounded, full]
+      max_stock_codes:
+        description: "Stock-code cap"
+        type: choice
+        required: true
+        default: "20"
+        options: ["5", "20", "null"]
+      bootstrap:
+        description: "Bootstrap iterations"
+        type: choice
+        required: true
+        default: "200"
+        options: ["50", "200", "500"]
+      threshold_quantile:
+        description: "Onset threshold quantile"
+        type: choice
+        required: true
+        default: "0.90"
+        options: ["0.85", "0.90", "0.95"]
+      gap:
+        description: "Prediction gap"
+        type: choice
+        required: true
+        default: "5"
+        options: ["5", "10"]
+      lookback_clean:
+        description: "Clean lookback"
+        type: choice
+        required: true
+        default: "10"
+        options: ["5", "10", "20"]
+      data_path:
+        description: "Optional model panel parquet path"
+        type: string
+        required: false
+        default: ""
+      data_url:
+        description: "Optional private URL for onset_model_panel.parquet"
+        type: string
+        required: false
+        default: ""
+      data_sha256:
+        description: "Optional sha256 for downloaded onset_model_panel.parquet"
+        type: string
+        required: false
+        default: ""
+
+jobs:
+  onset-baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Restore model panel from URL
+        if: ${{ inputs.data_url != '' }}
+        run: |
+          mkdir -p data/processed
+          DATA_URL="${{ inputs.data_url }}"
+          DATA_SHA256="${{ inputs.data_sha256 }}"
+          echo "Downloading onset model panel from the provided workflow input."
+          curl --fail --location --show-error "$DATA_URL" --output data/processed/onset_model_panel.parquet
+          if [ -n "$DATA_SHA256" ]; then
+            echo "$DATA_SHA256  data/processed/onset_model_panel.parquet" | sha256sum --check -
+          fi
+          ls -lh data/processed/onset_model_panel.parquet
+
+      - name: Environment check
+        run: python scripts/prepare_environment.py
+
+      - name: Data contract scan
+        run: python scripts/list_required_data.py --limit 200
+
+      - name: Onset panel dry run
+        run: python scripts/build_onset_model_panel.py --dry-run
+        continue-on-error: true
+
+      - name: Run onset baseline
+        run: |
+          DATA_PATH="${{ inputs.data_path }}"
+          DATA_ARGS=()
+          if [ -n "$DATA_PATH" ]; then
+            DATA_ARGS=(--data-path "$DATA_PATH")
+          fi
+          python experiments/onset_baseline_check/run_onset_baseline.py \
+            --mode "${{ inputs.mode }}" \
+            --max-stock-codes "${{ inputs.max_stock_codes }}" \
+            --bootstrap "${{ inputs.bootstrap }}" \
+            --threshold-quantile "${{ inputs.threshold_quantile }}" \
+            --gap "${{ inputs.gap }}" \
+            --lookback-clean "${{ inputs.lookback_clean }}" \
+            "${DATA_ARGS[@]}" \
+            --resume
+
+      - name: Print output paths
+        if: always()
+        run: |
+          echo "Output directory: experiments/onset_baseline_check/outputs"
+          echo "Log directory: experiments/onset_baseline_check/logs"
+          echo "Checkpoint directory: experiments/onset_baseline_check/checkpoints"
+          find experiments/onset_baseline_check -maxdepth 3 -type f | sort || true
+
+      - name: Upload onset artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: onset-baseline-${{ inputs.mode }}
+          path: |
+            experiments/onset_baseline_check/outputs/
+            experiments/onset_baseline_check/logs/
+            experiments/onset_baseline_check/checkpoints/manifest.json
+            docs/git_push_checklist.md
+            docs/cloud_run_guide.md
+            docs/data_transfer_to_cloud.md
+            docs/resume_validation_report.md
+            docs/round3_push_and_cloud_validation.md
+            data/processed/onset_model_panel_schema.json
+            data/processed/onset_model_panel_profile.md
+          if-no-files-found: ignore

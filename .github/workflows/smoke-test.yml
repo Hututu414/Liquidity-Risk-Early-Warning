@@ -1,0 +1,73 @@
+name: Smoke test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Environment check
+        run: python scripts/prepare_environment.py
+
+      - name: Data contract scan
+        run: python scripts/list_required_data.py --limit 80
+
+      - name: Onset panel dry run
+        run: python scripts/build_onset_model_panel.py --dry-run
+        continue-on-error: true
+
+      - name: Compile core scripts
+        run: |
+          python -m py_compile scripts/prepare_environment.py
+          python -m py_compile scripts/list_required_data.py
+          python -m py_compile scripts/build_onset_model_panel.py
+          python -m py_compile scripts/run_bounded_onset_cloud_ready.py
+          python -m py_compile experiments/onset_baseline_check/run_onset_baseline.py
+
+      - name: Optional onset smoke run
+        shell: bash
+        run: |
+          if [ -f data_intermediate/stage2_lsi_labels/lsi_labels_manifest.csv ]; then
+            python experiments/onset_baseline_check/run_onset_baseline.py --mode smoke
+          else
+            echo "No stage-2 LSI manifest in this checkout; skipping data-dependent onset smoke run."
+          fi
+
+      - name: Upload smoke logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-test-logs
+          path: |
+            experiments/onset_baseline_check/logs/
+            experiments/onset_baseline_check/outputs/run_log.txt
+            experiments/onset_baseline_check/outputs/cloud_run_summary.md
+            experiments/onset_baseline_check/outputs/onset_baseline_report.md
+            experiments/onset_baseline_check/outputs/inclusion_decision_note.md
+            experiments/onset_baseline_check/checkpoints/manifest.json
+            docs/git_push_checklist.md
+            docs/cloud_run_guide.md
+            docs/data_transfer_to_cloud.md
+            docs/resume_validation_report.md
+            docs/round3_push_and_cloud_validation.md
+            data/processed/onset_model_panel_schema.json
+            data/processed/onset_model_panel_profile.md
+          if-no-files-found: ignore
