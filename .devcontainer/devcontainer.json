@@ -2,6 +2,11 @@
   "name": "Liquidity Risk Early Warning",
   "image": "mcr.microsoft.com/devcontainers/python:1-3.11-bullseye",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "features": {
+    "ghcr.io/devcontainers/features/sshd:1": {
+      "version": "latest"
+    }
+  },
   "postCreateCommand": "python -m pip install --upgrade pip && pip install -r requirements.txt",
   "customizations": {
     "vscode": {
