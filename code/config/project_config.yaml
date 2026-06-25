@@ -1,0 +1,42 @@
+﻿project:
+  name: hft_liquidity_pressure_warning
+  fixed_python: "D:/Users/TtT20/source/repos/.venv-codex-data/Scripts/python.exe"
+
+inputs:
+  raw_panel: "data_inbox/preprocessed/panel/minute_panel_preprocessed_raw.parquet"
+  preprocessed_root: "data_inbox/preprocessed"
+  required_subdirs:
+    - panel
+    - quality
+    - sample
+    - scripts
+
+trading_session:
+  morning_start: "09:30:00"
+  morning_end: "11:30:00"
+  afternoon_start: "13:00:00"
+  afternoon_regular_end: "14:57:00"
+  afternoon_terminal_close: "15:00:00"
+  expected_slots: 240
+
+model_ready:
+  min_minutes_per_code_date: 236
+  fail_on_duplicate_keys: true
+  compression: zstd
+
+stage2:
+  windows: [5, 10, 20]
+  label_horizons: [5, 10]
+  train_fraction: 0.6
+  validation_fraction: 0.2
+  label_quantile: 0.9
+  label_source_lsi_window: 5
+  primary_index_code: "000300.SH"
+  amount_scale_for_illiq: 100000000.0
+  robust_mad_scale: 1.4826
+  epsilon: 1.0e-12
+  compression: zstd
+
+diagnostics:
+  max_market_plot_points: 4000
+  figure_dpi: 300

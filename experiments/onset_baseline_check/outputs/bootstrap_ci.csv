@@ -1,0 +1,17 @@
+﻿comparison,metric,observed_delta,ci_low,ci_high,bootstrap_iterations,rows_used
+H5 best_vs_naive,PR_AUC,0.004525,-0.004389,0.011783,10,3999
+H5 best_vs_naive,Top5_lift,0.855401,0.301903,1.353534,10,3999
+H5 M_vs_P_same_model,PR_AUC,-0.006201,-0.010207,-0.003078,10,3999
+H5 M_vs_P_same_model,Top5_lift,0.213850,0.023351,0.416144,10,3999
+H5 C_vs_P_same_model,PR_AUC,-0.006719,-0.011814,-0.000852,10,3999
+H5 C_vs_P_same_model,Top5_lift,0.748476,0.240951,0.886288,10,3999
+H5 ALL_vs_P_same_model,PR_AUC,0.004909,0.001654,0.009872,10,3999
+H5 ALL_vs_P_same_model,Top5_lift,0.962326,0.365885,1.423257,10,3999
+H10 best_vs_naive,PR_AUC,0.020389,0.010705,0.027879,10,3999
+H10 best_vs_naive,Top5_lift,0.862529,0.282013,1.475616,10,3999
+H10 M_vs_P_same_model,PR_AUC,-0.017031,-0.035555,-0.012554,10,3999
+H10 M_vs_P_same_model,Top5_lift,-0.470471,-0.800811,0.117065,10,3999
+H10 C_vs_P_same_model,PR_AUC,0.008820,0.001761,0.016788,10,3999
+H10 C_vs_P_same_model,Top5_lift,-0.313647,-0.746750,0.474509,10,3999
+H10 ALL_vs_P_same_model,PR_AUC,0.006738,-0.009438,0.018701,10,3999
+H10 ALL_vs_P_same_model,Top5_lift,-0.470471,-0.768836,0.223085,10,3999

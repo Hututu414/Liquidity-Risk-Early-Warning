@@ -1,0 +1,3 @@
+﻿horizon,events,event_recall,mean_lead_minutes,daily_false_alarms,top5_signal_event_coverage,score_threshold_top5
+H10,255,0.058824,22.000000,2.055556,0.058824,0.979486
+H5,187,0.000000,,2.352941,0.000000,0.977835

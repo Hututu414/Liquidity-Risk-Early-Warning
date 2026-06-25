@@ -1,0 +1,16 @@
+[project]
+name = "liquidity-risk-early-warning"
+version = "0.1.0"
+description = "Research workspace for A-share minute-level liquidity-risk early warning experiments."
+requires-python = ">=3.10"
+readme = "README.md"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["code/tests"]
+pythonpath = ["src", "code"]
