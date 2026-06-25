@@ -1,0 +1,41 @@
+﻿components:
+  windows: [5, 10, 20]
+  definitions:
+    ILLIQ:
+      base: "abs(ret_1m) divided by scaled amount"
+      rolling: mean
+      stress_direction: positive
+    Range:
+      base: "log(high / low)"
+      rolling: mean
+      stress_direction: positive
+    RV:
+      base: "ret_1m squared"
+      rolling: sum
+      stress_direction: positive
+    RelAmt:
+      base: "log1p(amount)"
+      rolling: mean
+      stress_direction: negative
+
+lsi:
+  formula: "z(ILLIQ) + z(Range) + z(RV) - z(RelAmt)"
+  standardization_group:
+    - code
+    - slot
+  standardization_source: train_period_only
+  robust_location: median
+  robust_scale: MAD
+
+labels:
+  horizons: [5, 10]
+  source: "future max LSI_5 within same code-date"
+  threshold_source: train_period_only
+  threshold_quantile: 0.9
+
+market_context:
+  MarketLSI: "cross-sectional stock mean of LSI_5 by datetime"
+  CrossStress: "cross-sectional stock share of Stress_H5 by datetime"
+  IndexRet: "primary index one-minute return by datetime"
+  IndexRV: "primary index RV_5 by datetime"
+  MarketRelAmt: "cross-sectional stock mean of RelAmt_5 by datetime"

@@ -45,12 +45,12 @@ on:
         required: false
         default: ""
       data_url:
-        description: "Optional private URL for onset_model_panel.parquet"
+        description: "Optional private URL for onset_model_panel_full80.parquet"
         type: string
         required: false
         default: ""
       data_sha256:
-        description: "Optional sha256 for downloaded onset_model_panel.parquet"
+        description: "Optional sha256 for downloaded onset_model_panel_full80.parquet"
         type: string
         required: false
         default: ""
@@ -81,11 +81,11 @@ jobs:
           DATA_URL="${{ inputs.data_url }}"
           DATA_SHA256="${{ inputs.data_sha256 }}"
           echo "Downloading onset model panel from the provided workflow input."
-          curl --fail --location --show-error "$DATA_URL" --output data/processed/onset_model_panel.parquet
+          curl --fail --location --show-error "$DATA_URL" --output data/processed/onset_model_panel_full80.parquet
           if [ -n "$DATA_SHA256" ]; then
-            echo "$DATA_SHA256  data/processed/onset_model_panel.parquet" | sha256sum --check -
+            echo "$DATA_SHA256  data/processed/onset_model_panel_full80.parquet" | sha256sum --check -
           fi
-          ls -lh data/processed/onset_model_panel.parquet
+          ls -lh data/processed/onset_model_panel_full80.parquet
 
       - name: Environment check
         run: python scripts/prepare_environment.py
@@ -136,6 +136,6 @@ jobs:
             docs/data_transfer_to_cloud.md
             docs/resume_validation_report.md
             docs/round3_push_and_cloud_validation.md
-            data/processed/onset_model_panel_schema.json
-            data/processed/onset_model_panel_profile.md
+            data/processed/onset_model_panel_full80_schema.json
+            data/processed/onset_model_panel_full80_profile.md
           if-no-files-found: ignore

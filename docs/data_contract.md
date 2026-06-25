@@ -1,83 +1,157 @@
-# Data contract for `experiments/onset_baseline_check`
+# Data Contract
 
-This document describes the minimum schema expected by the onset baseline experiment. The experiment can run in `smoke`, `bounded`, or `full` mode, but all real-data modes depend on the same stage-2 LSI-label data contract.
+默认复现实验数据文件：
 
-## Required Control Files
+```text
+data/processed/onset_model_panel_full80.parquet
+```
 
-- `data_intermediate/stage2_lsi_labels/lsi_labels_manifest.csv`
-- `data_intermediate/stage2_lsi_labels/time_split.json`
-- `data_intermediate/stage2_lsi_labels/label_thresholds_train.json`
+该文件不提交 Git。请在本地、Codespaces 或其他受控运行环境中手动放置。
 
-The manifest must contain at least:
+## Expected Scale
 
-- `code`
-- `output_path`
-- `rows`
-- `is_index`
+参考 full80 面板规模：
 
-## Required Per-Code Shard Columns
+- 股票范围：约 80 只非指数 A 股。
+- 时间范围：约 2023-05-15 至 2026-05-13。
+- 频率：1 分钟。
+- 字段数：约 40 列。
 
-The runner reads per-code parquet shards listed in `lsi_labels_manifest.csv`. Required columns are:
+实际复现时允许行数因数据清理版本略有差异，但字段语义必须一致。
 
-- `code`: stock code or symbol.
-- `is_index`: boolean flag; stock rows are used and index rows are excluded from stock-level training.
-- `date`: trading date.
-- `datetime`: minute timestamp.
-- `slot`: intraday minute slot.
-- `ret_1m`: one-minute return.
-- `amount`: traded amount.
-- `valid_minutes`: valid minute count or coverage marker.
-- `LSI_5`, `LSI_10`, `LSI_20`: liquidity stress index values.
-- `MarketLSI`: market-level LSI.
-- `IndexRet`: index return state.
-- `IndexRV`: index realized volatility state.
-- `MarketRelAmt`: market relative amount state.
-- `Stress_H5`, `Stress_H10`: original continuation labels, if available.
+## Required Columns
 
-The current feature specification also expects component features:
+基础标识：
 
-- `ILLIQ_5`, `Range_5`, `RV_5`, `RelAmt_5`
-- `ILLIQ_10`, `Range_10`, `RV_10`, `RelAmt_10`
-- `ILLIQ_20`, `Range_20`, `RV_20`, `RelAmt_20`
+```text
+code
+date
+datetime
+slot
+is_index
+```
 
-and standardized component features:
+兼容标识：
 
-- `z_ILLIQ_5`, `z_Range_5`, `z_RV_5`, `z_RelAmt_5`
-- `z_ILLIQ_10`, `z_Range_10`, `z_RV_10`, `z_RelAmt_10`
-- `z_ILLIQ_20`, `z_Range_20`, `z_RV_20`, `z_RelAmt_20`
+```text
+stock_code
+symbol
+```
 
-## Time Split Fields
+原始 OHLCV 与成交额数据用于上游构造流程；`onset_model_panel_full80.parquet` 是模型就绪面板，默认不要求保留原始 OHLCV 列。
 
-`time_split.json` must define:
+流动性压力组成变量：
 
-- `train_start`
-- `train_end`
-- `validation_start`
-- `validation_end`
-- `test_start`
-- `test_end`
+```text
+ILLIQ_5
+Range_5
+RV_5
+RelAmt_5
+ILLIQ_10
+Range_10
+RV_10
+RelAmt_10
+ILLIQ_20
+Range_20
+RV_20
+RelAmt_20
+```
 
-The experiment applies a `gap + horizon` embargo around split boundaries to avoid future-window leakage.
+标准化组成变量：
 
-## Label Threshold Fields
+```text
+z_ILLIQ_5
+z_Range_5
+z_RV_5
+z_RelAmt_5
+z_ILLIQ_10
+z_Range_10
+z_RV_10
+z_RelAmt_10
+z_ILLIQ_20
+z_Range_20
+z_RV_20
+z_RelAmt_20
+```
 
-`label_thresholds_train.json` should define:
+LSI、市场状态与标签：
 
-- `H5`
-- `H10`
+```text
+LSI_5
+LSI_10
+LSI_20
+MarketLSI
+IndexRet
+IndexRV
+MarketRelAmt
+Stress_H5
+Stress_H10
+```
 
-If those thresholds are unavailable and the configuration allows fallback, thresholds are derived from train-period `LSI_5` quantiles.
+## Label Definition
 
-## Data Not Stored in Git
+onset baseline 使用统一标签设置：
 
-Large parquet/csv.gz/csv data files should not be committed. Place them in the expected folders in a cloud runtime before launching a real experiment, or restore them from an external artifact/source.
+```text
+gap = 5
+lookback_clean = 10
+threshold_quantile = 0.90
+horizons = H5, H10
+```
 
-## Validation Helper
+实验脚本会在不改动原始 `Stress_H5` / `Stress_H10` 字段的前提下构造 onset 标签。
 
-Run:
+## Time Split
+
+实验应使用训练、验证、测试边界，并在边界附近按 `gap + horizon` 做 embargo，避免未来窗口跨越样本区间。若使用旧的 stage2 shard 数据，切分文件可来自：
+
+```text
+data_intermediate/stage2_lsi_labels/time_split.json
+```
+
+该目录是本地中间产物，不提交 Git。
+
+## Compatibility Fallback
+
+`experiments/onset_baseline_check/run_onset_baseline.py` 优先读取 `data/processed/onset_model_panel_full80.parquet`。如果该文件不存在且未显式指定 `--data-path`，脚本仍可回退到旧的 shard manifest：
+
+```text
+data_intermediate/stage2_lsi_labels/lsi_labels_manifest.csv
+```
+
+该 fallback 只用于本地兼容，不是干净 GitHub 仓库的数据提交策略。
+
+## Data Exclusion Policy
+
+不得提交：
+
+```text
+*.parquet
+data/raw/
+data_inbox/
+data_intermediate/
+checkpoints/
+*.joblib
+*.pkl
+```
+
+可提交小型 schema/profile 文档，例如：
+
+```text
+data/processed/onset_model_panel_full80_schema.json
+data/processed/onset_model_panel_full80_profile.md
+```
+
+## Validation
+
+放置数据后运行：
 
 ```bash
 python scripts/list_required_data.py
 ```
 
-The script scans candidate data files without reading full large files, reports schemas, and flags files that appear to satisfy the minimum onset experiment contract.
+然后运行 smoke test：
+
+```bash
+python experiments/onset_baseline_check/run_onset_baseline.py --mode smoke --data-path data/processed/onset_model_panel_full80.parquet
+```

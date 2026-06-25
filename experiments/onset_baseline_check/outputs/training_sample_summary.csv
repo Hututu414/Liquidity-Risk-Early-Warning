@@ -1,0 +1,9 @@
+﻿task,horizon,sample,rows,event_rate
+onset,H5,train,180,0.500000
+onset,H5,train_plus_validation,240,0.500000
+onset,H10,train,180,0.500000
+onset,H10,train_plus_validation,240,0.500000
+continuation,H5,train,180,0.500000
+continuation,H5,train_plus_validation,240,0.500000
+continuation,H10,train,180,0.500000
+continuation,H10,train_plus_validation,240,0.500000

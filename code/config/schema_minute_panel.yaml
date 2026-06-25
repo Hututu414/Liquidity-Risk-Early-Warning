@@ -1,0 +1,62 @@
+﻿raw_minute_panel:
+  required_columns:
+    code:
+      dtype_family: string
+      nullable: false
+    is_index:
+      dtype_family: bool
+      nullable: false
+    datetime:
+      dtype_family: timestamp
+      nullable: false
+    date:
+      dtype_family: date
+      nullable: false
+    time:
+      dtype_family: string
+      nullable: false
+    open:
+      dtype_family: numeric
+      nullable: true
+    high:
+      dtype_family: numeric
+      nullable: true
+    low:
+      dtype_family: numeric
+      nullable: true
+    close:
+      dtype_family: numeric
+      nullable: true
+    volume:
+      dtype_family: numeric
+      nullable: true
+    amount:
+      dtype_family: numeric
+      nullable: true
+  optional_columns:
+    - year
+    - month
+    - source_file
+    - source_sheet
+    - batch
+    - row_in_sheet
+  primary_key:
+    - code
+    - datetime
+
+model_ready_panel:
+  required_columns:
+    - code
+    - is_index
+    - datetime
+    - date
+    - time
+    - slot
+    - open
+    - high
+    - low
+    - close
+    - volume
+    - amount
+    - ret_1m
+    - valid_minutes

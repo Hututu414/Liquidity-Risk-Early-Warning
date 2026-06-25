@@ -68,6 +68,6 @@ jobs:
             docs/data_transfer_to_cloud.md
             docs/resume_validation_report.md
             docs/round3_push_and_cloud_validation.md
-            data/processed/onset_model_panel_schema.json
-            data/processed/onset_model_panel_profile.md
+            data/processed/onset_model_panel_full80_schema.json
+            data/processed/onset_model_panel_full80_profile.md
           if-no-files-found: ignore

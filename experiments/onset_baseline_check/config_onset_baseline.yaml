@@ -1,6 +1,7 @@
 seed: 20260620
 
 paths:
+  data_path: data/processed/onset_model_panel_full80.parquet
   lsi_manifest: data_intermediate/stage2_lsi_labels/lsi_labels_manifest.csv
   time_split: data_intermediate/stage2_lsi_labels/time_split.json
   existing_label_thresholds: data_intermediate/stage2_lsi_labels/label_thresholds_train.json

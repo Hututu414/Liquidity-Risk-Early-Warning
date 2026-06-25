@@ -2,17 +2,15 @@
 
 This isolated experiment tests whether short-horizon liquidity-pressure warnings mainly reflect LSI persistence or contain incremental onset-warning value beyond persistence.
 
-The script reads existing stage-2 LSI label shards and split files, writes all experiment outputs under this directory, and does not modify the paper, final LaTeX files, existing paper figures, or the original data pipeline.
+The script first looks for the model-ready full80 panel at `data/processed/onset_model_panel_full80.parquet`. It can fall back to existing stage-2 LSI label shards for local compatibility. All outputs are written under this experiment directory, and the script does not modify the paper, final LaTeX files, existing paper figures, or the original data pipeline.
 
 ## Entry Point
 
 ```bash
-python experiments/onset_baseline_check/run_onset_baseline.py --mode smoke
-python experiments/onset_baseline_check/run_onset_baseline.py --mode bounded
-python experiments/onset_baseline_check/run_onset_baseline.py --mode full --resume
+python experiments/onset_baseline_check/run_onset_baseline.py --mode smoke --data-path data/processed/onset_model_panel_full80.parquet
+python experiments/onset_baseline_check/run_onset_baseline.py --mode bounded --data-path data/processed/onset_model_panel_full80.parquet
+python experiments/onset_baseline_check/run_onset_baseline.py --mode full --resume --data-path data/processed/onset_model_panel_full80.parquet
 ```
-
-On the local Windows research machine, follow the project `AGENTS.md` interpreter rule.
 
 ## Modes
 
@@ -34,6 +32,7 @@ The full mode is never run automatically by GitHub Actions.
 --resume
 --dry-run
 --config experiments/onset_baseline_check/config_onset_baseline.yaml
+--data-path data/processed/onset_model_panel_full80.parquet
 ```
 
 ## Outputs
@@ -45,7 +44,7 @@ The full mode is never run automatically by GitHub Actions.
 - `outputs/feature_group_increment_table.csv`
 - `outputs/bootstrap_ci.csv`
 - `outputs/event_level_metrics.csv`
-- `outputs/*.png` and `outputs/*.pdf`
+- `outputs/*.png`
 - `logs/run_YYYYMMDD_HHMMSS.log`
 - `checkpoints/*.json`
 
