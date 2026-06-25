@@ -1,0 +1,5 @@
+﻿spec,convergence,objective_value,AIC,BIC,boundary_parameter_count,boundary_parameter_ratio,persistence,finite_state_ratio,hessian_available,validation_filtering_loss,development_filtering_loss,validity,reason,paper_decision,primary_module
+RGARCH-CARR-SK-RV,False,,,,,,,,False,,,invalid_for_primary,No runnable estimator exists in this agent-only workspace; RGARCH states are not forced.,remove from main text; keep only as invalidity diagnostic if needed,False
+RGARCH-CARR-SK-RBV,False,,,,,,,,False,,,invalid_for_primary,No runnable estimator exists in this agent-only workspace; RGARCH states are not forced.,remove from main text; keep only as invalidity diagnostic if needed,False
+RGARCH-CARR-SK-MedRV,False,,,,,,,,False,,,invalid_for_primary,No runnable estimator exists in this agent-only workspace; RGARCH states are not forced.,remove from main text; keep only as invalidity diagnostic if needed,False
+RGARCH-CARR-SK-RMAD,False,,,,,,,,False,,,invalid_for_primary,No runnable estimator exists in this agent-only workspace; RGARCH states are not forced.,remove from main text; keep only as invalidity diagnostic if needed,False

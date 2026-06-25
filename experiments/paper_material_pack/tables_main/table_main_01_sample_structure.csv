@@ -1,0 +1,2 @@
+﻿sample_stock_count,trading_days,rows,columns,date_range,base_train,base_validation,test_or_development,lockbox,threshold_H5,threshold_H10,gap,lookback_clean,threshold_quantile
+80,725,13840730,40,2023-05-15 to 2026-05-13,through 2025-02-28,2025-03-01 to 2025-09-26,onset test starts 2025-09-29; fusion_development 2025-09-27 to 2026-02-28,fusion_lockbox 2026-03-01 to 2026-05-13,7.972218375552092,9.606480057878922,5,10,0.9

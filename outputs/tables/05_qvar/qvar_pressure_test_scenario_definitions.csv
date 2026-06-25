@@ -1,0 +1,5 @@
+﻿scenario,scenario_cn,shock_definition,shock_variables
+market_crash,市场急跌,IndexRet=-2.0 standard deviations,IndexRet
+volatility_spike,波动放大,IndexRV=+2.0 standard deviations,IndexRV
+liquidity_contraction,成交收缩 / 流动性压力,MarketRelAmt=-2.0 standard deviations,MarketRelAmt
+composite_pressure,复合压力,"IndexRet=-2.0, IndexRV=+2.0, MarketRelAmt=-2.0 standard deviations","IndexRet,IndexRV,MarketRelAmt"

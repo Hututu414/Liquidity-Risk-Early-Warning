@@ -1,0 +1,7 @@
+﻿horizon,sample,rows,positive_rate
+H5,train,360000,0.5
+H5,train_plus_validation,440000,0.5
+H5,validation_selection,260000,0.04938846153846154
+H10,train,360000,0.5
+H10,train_plus_validation,440000,0.5
+H10,validation_selection,260000,0.05248846153846154

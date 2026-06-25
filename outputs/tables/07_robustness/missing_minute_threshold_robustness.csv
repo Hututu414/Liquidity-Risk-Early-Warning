@@ -1,0 +1,3 @@
+﻿valid_minute_threshold,code_dates_total,code_dates_kept,code_dates_dropped,kept_share,estimated_rows_kept,notes
+236,60818,60767,51,0.9991614324706501,14536695,基于 code-date 有效分钟统计的样本影响评估，未重跑 stage1。
+238,60818,60750,68,0.9988819099608669,14532669,基于 code-date 有效分钟统计的样本影响评估，未重跑 stage1。

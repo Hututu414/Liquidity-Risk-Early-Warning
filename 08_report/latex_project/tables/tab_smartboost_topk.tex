@@ -1,0 +1,26 @@
+\begin{table}[H]
+\centering
+\caption{SMARTBoost test 高风险组真实压力发生率与 lift}
+\label{tab:smartboost-topk}
+\small
+\begin{threeparttable}
+\begin{tabular}{lrrr}
+\toprule
+目标 & 高风险组 & 真实压力发生率 & lift \\
+\midrule
+H10 & 1\% & 85.71\% & 14.77 \\
+H10 & 5\% & 56.42\% & 9.72 \\
+H10 & 10\% & 38.54\% & 6.64 \\
+H10 & 20\% & 23.74\% & 4.09 \\
+H5 & 1\% & 89.41\% & 16.43 \\
+H5 & 5\% & 59.30\% & 10.90 \\
+H5 & 10\% & 39.26\% & 7.21 \\
+H5 & 20\% & 23.56\% & 4.33 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item 注：Top-K 分组按预测风险从高到低排序得到；lift 为相对于 test 样本基准事件率的倍数。
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

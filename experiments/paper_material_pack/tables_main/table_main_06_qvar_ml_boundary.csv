@@ -1,0 +1,6 @@
+﻿module,paper_role,main_or_appendix,predictive_increment_claim,conclusion
+QVAR,retain,main,no stable ML_ALL increment claim,tail quantile comovement/state descriptor
+RGARCH-CARR-SK,remove from main text,appendix or limitation only,none,all candidate specs invalid_for_primary
+econometric-ML fusion,do not use as main storyline,appendix/negative result only,not stable beyond ML_ALL,avoid method stacking
+cross-sectional C,not standalone core contribution,main as ablation boundary,no stable standalone positive increment,ALL improves but C alone is not core
+ML onset,core result,main,stable vs naive persistence,primary out-of-sample warning evidence

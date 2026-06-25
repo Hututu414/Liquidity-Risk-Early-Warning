@@ -1,0 +1,22 @@
+\begin{table}[tbp]
+\centering
+\caption{研究框架、技术实现与解释边界}
+\label{tab:model-framework}
+\small
+\begin{threeparttable}
+\begin{tabularx}{\textwidth}{p{0.16\textwidth}p{0.26\textwidth}Y}
+\toprule
+模块 & 技术实现 & 本文用途与解释边界 \\
+\midrule
+压力指数构造 & LSI 与 MarketLSI & 将分钟级 OHLCV 与成交额信息压缩为短时压力代理指标；不等同于订单簿真实流动性。 \\
+动态风险刻画 & \mbox{RGARCH-CARR-SK} & 刻画 MarketLSI 压力创新的条件风险和高阶矩路径；用于风险度量而非收益率预测。 \\
+尾部分位传导 & QVAR & 描述市场状态变量在不同分位点下的联动和情景响应；情景模拟不作严格因果识别。 \\
+样本外预警 & SMARTBoost & 检验无泄漏历史特征对未来 H5/H10 压力事件的预测能力；作为唯一正式机器学习预警模型。 \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item 注：三类模型形成递进证据链，而不是并列的模型竞赛。
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

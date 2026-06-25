@@ -1,0 +1,32 @@
+\contentsline {section}{\numberline {1}引言}{3}{section.1}%
+\contentsline {section}{\numberline {2}文献综述}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}高频市场状态、流动性压力与已实现测度}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}动态风险度量、RGARCH-CARR-SK 与 QVAR 尾部传导}{4}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}机器学习金融预警、SMARTBoost 与本文边际贡献}{4}{subsection.2.3}%
+\contentsline {section}{\numberline {3}研究设计与方法}{6}{section.3}%
+\contentsline {subsection}{\numberline {3.1}总体研究框架}{6}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}LSI 指数与未来压力标签}{6}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}RGARCH-CARR-SK 动态压力风险模型}{7}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}QVAR 尾部分位传导模型}{8}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}SMARTBoost 样本外预警模型}{9}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}样本切分、评价指标与时间边界约束}{9}{subsection.3.6}%
+\contentsline {section}{\numberline {4}数据来源、变量构造与描述性事实}{9}{section.4}%
+\contentsline {subsection}{\numberline {4.1}数据来源与样本边界}{9}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}核心变量定义}{11}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}样本覆盖与数据质量}{12}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}LSI 日内模式}{12}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}MarketLSI 与压力事件率}{13}{subsection.4.5}%
+\contentsline {section}{\numberline {5}实证结果分析}{14}{section.5}%
+\contentsline {subsection}{\numberline {5.1}RGARCH-CARR-SK 动态压力风险结果}{15}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}QVAR 尾部分位传导与压力测试}{17}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}SMARTBoost 样本外预警结果}{19}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}三类证据链的综合解释}{21}{subsection.5.4}%
+\contentsline {section}{\numberline {6}稳健性检验}{22}{section.6}%
+\contentsline {subsection}{\numberline {6.1}标签阈值稳健性}{22}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}RGARCH 已实现压力测度稳健性}{23}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}QVAR 分位点与情景设定稳健性}{23}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}SMARTBoost 特征组与 Top-K 稳健性}{24}{subsection.6.4}%
+\contentsline {section}{\numberline {7}结论与局限性}{25}{section.7}%
+\contentsline {section}{\numberline {A}附录图表}{26}{appendix.A}%
+\contentsline {subsection}{\numberline {A.1}描述性诊断补充图}{26}{subsection.A.1}%
+\contentsline {subsection}{\numberline {A.2}模型诊断补充图}{27}{subsection.A.2}%

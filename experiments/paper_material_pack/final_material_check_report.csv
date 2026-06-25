@@ -1,0 +1,9 @@
+﻿check,passed,evidence
+all_csv_readable,True,bad=[]
+all_md_nonempty,True,empty=[]
+all_png_pdf_exist,True,missing=[]
+figure_qc_pass,True,{'PASS': 14}
+source_index_complete,True,rows=63
+no_disallowed_positive_claims,True,hits=[]
+crossstress_not_used_as_feature,True,negative/zero mentions only
+final_tex_not_modified,True,no diff

@@ -1,0 +1,25 @@
+\begin{table}[tbp]
+\centering
+\caption{核心变量、压力标签与防泄漏边界}
+\label{tab:variables}
+\small
+\begin{threeparttable}
+\begin{tabularx}{\textwidth}{p{0.18\textwidth}p{0.24\textwidth}Y}
+\toprule
+变量 & 含义 & 构造与解释边界 \\
+\midrule
+LSI(k) & 个股短时压力指数 & 由 ILLIQ、Range、RV 与 RelAmt 训练期股票-日内 slot 标准化后合成；属于压力代理指标。 \\
+MarketLSI & 市场压力指数 & 个股 LSI 的市场层面聚合；仅使用当前及历史分钟信息。 \\
+Stress\_H5 & 未来 5 分钟压力标签 & 未来窗口压力是否超过训练期阈值；只作为目标变量。 \\
+Stress\_H10 & 未来 10 分钟压力标签 & 未来窗口压力是否超过训练期阈值；只作为目标变量。 \\
+IndexRet & 市场收益状态 & 分钟收益的市场聚合，用于 QVAR 和预警特征。 \\
+IndexRV & 市场波动状态 & 分钟收益平方的市场聚合，用于 QVAR 和预警特征。 \\
+MarketRelAmt & 市场成交承接力 & 成交额相对历史基准的市场聚合；数值越低表示成交收缩。 \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item 注：CrossStress 只在 QVAR 中作为截面压力状态变量，不进入最终 SMARTBoost 特征矩阵。
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

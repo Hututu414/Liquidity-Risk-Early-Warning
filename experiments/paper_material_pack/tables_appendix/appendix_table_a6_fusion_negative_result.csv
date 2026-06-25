@@ -1,0 +1,23 @@
+﻿period,horizon,scheme,Delta_PR_AUC_vs_ML_ALL,Delta_log_loss_vs_ML_ALL,Delta_Brier_vs_ML_ALL,avg_development_rank_delta,paper_decision
+fusion_lockbox,H5,B0_Naive,-0.0653055687314657,0.2988729774951935,0.1171324402093887,-0.08395942673602,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H5,B1_PersistenceLogit,-0.0627301307081674,0.2802713811397552,0.0962422490119934,-0.0828901013979881,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H5,B2_EconometricHazard,-0.0735260452401265,0.2312013208866119,0.0769678652286529,-0.0947162558862341,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H5,F1_ALL_QVAR,-0.0005467349104487,-0.000393122434616,-0.0003322213888168,-0.0010134130364073,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H5,F3_ALL_ECON,-0.0005467349104487,-0.000393122434616,-0.0003322213888168,-0.0010134130364073,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H5,F4_ALL_ECON_INTERACTIONS,-0.0002761049694347,-0.0003884732723236,-0.0002971142530441,-0.0010859542266078,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H5,F7_REGIME_INTERACTION,-0.0002761049694347,-0.0003884732723236,-0.0002971142530441,-0.0010859542266078,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H5,F5_ML_ASSISTED_FEATURE,-0.0015629980067148,0.0008009374141693,5.573034286499024e-05,-0.0019542402560067,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H5,F6_RESIDUAL_HYBRID,-0.0015629980067148,0.0008009374141693,5.573034286499024e-05,-0.0019542402560067,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H5,F8_REGIME_GATED,-0.0010342956386852,-0.003168910741806,-0.0015580207109451,-0.0026771023265206,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H5,F9_STACKED,0.00011495069015,-0.0064061284065246,-0.0007422864437103,-0.0013237933422665,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H10,B0_Naive,-0.0779904808261147,0.2845503985881805,0.1110193878412246,-0.08395942673602,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H10,B1_PersistenceLogit,-0.076963474024653,0.265836626291275,0.0887082517147064,-0.0828901013979881,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H10,B2_EconometricHazard,-0.0898050356181914,0.2221690714359283,0.0733435153961181,-0.0947162558862341,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H10,F1_ALL_QVAR,-0.0009480316044222,-0.0014199912548065,-0.0008051246404647,-0.0010134130364073,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H10,F3_ALL_ECON,-0.0009480316044222,-0.0014199912548065,-0.0008051246404647,-0.0010134130364073,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H10,F4_ALL_ECON_INTERACTIONS,-0.0002911681722013,-0.0021757185459136,-0.0011318624019622,-0.0010859542266078,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H10,F7_REGIME_INTERACTION,-0.0002911681722013,-0.0021757185459136,-0.0011318624019622,-0.0010859542266078,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H10,F5_ML_ASSISTED_FEATURE,-0.001096461762261,-0.0004432201385498,-0.0004435330629348,-0.0019542402560067,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H10,F6_RESIDUAL_HYBRID,-0.001096461762261,-0.0004432201385498,-0.0004435330629348,-0.0019542402560067,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H10,F8_REGIME_GATED,-0.0049439860415458,-0.0033893287181854,-0.0016475766897201,-0.0026771023265206,negative/boundary result; F9 ex-post cannot reselect main scheme
+fusion_lockbox,H10,F9_STACKED,0.0002359171025359,-0.0078422725200653,-0.0013817846775054,-0.0013237933422665,negative/boundary result; F9 ex-post cannot reselect main scheme

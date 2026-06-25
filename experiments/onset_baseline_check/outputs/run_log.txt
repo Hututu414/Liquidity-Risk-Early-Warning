@@ -1,0 +1,59 @@
+[2026-06-21 16:13:08] Run mode=smoke runtime=local memory=unavailable
+[2026-06-21 16:13:08] Effective config: {"seed": 20260620, "paths": {"lsi_manifest": "data_intermediate/stage2_lsi_labels/lsi_labels_manifest.csv", "time_split": "data_intermediate/stage2_lsi_labels/time_split.json", "existing_label_thresholds": "data_intermediate/stage2_lsi_labels/label_thresholds_train.json", "output_dir": "experiments/onset_baseline_check/outputs", "data_path": "data/processed/onset_model_panel.parquet", "data_path_explicit": false}, "main_label": {"gap": 5, "lookback_clean": 10, "threshold_quantile": 0.9, "prefer_existing_thresholds_for_main": true}, "robustness_grid": {"enabled": true, "gaps": [5], "lookback_clean": [10], "threshold_quantiles": [0.9]}, "sampling": {"max_stock_codes": 3, "train_max_per_class_per_code": 30, "trainval_max_per_class_per_code": 40, "eval_max_rows_per_task_horizon_period": 4000, "event_eval_full_test": false}, "models": {"logit": {"max_iter": 150, "class_weight": "balanced"}, "lightgbm": {"n_estimators": 20, "learning_rate": 0.05, "num_leaves": 31, "min_child_samples": 200, "subsample": 0.85, "colsample_bytree": 0.85}, "smartboost": {"max_iter": 20, "learning_rate": 0.045, "max_leaf_nodes": 15, "min_samples_leaf": 200, "l2_regularization": 0.15}}, "bootstrap": {"iterations": 10, "confidence_level": 0.95, "max_rows": 10000}, "figures": {"dpi": 300, "save_pdf": true}, "run_mode": "smoke", "resume": false, "dry_run": false, "cache_signature": "e99c69549ed6876c"}
+Applied deterministic stock-code cap: 3/80 stock shards
+[2026-06-21 16:13:08] Loaded manifest rows=3 stock_count=3
+Built cross-sectional context for 173,922 minute timestamps
+[2026-06-21 16:13:20] Main thresholds: {5: 7.972218375552092, 10: 9.606480057878922}
+Onset label equivalence validation passed.
+Preparing shard 1/3: 000002.SZ
+Preparing shard 2/3: 600196.SH
+Preparing shard 3/3: 688981.SH
+Fit onset H5 P Logit: OK
+Fit onset H5 P LightGBM: OK
+Fit onset H5 P SMARTBoost: OK
+Fit onset H5 M Logit: OK
+Fit onset H5 M LightGBM: OK
+Fit onset H5 M SMARTBoost: OK
+Fit onset H5 C Logit: OK
+Fit onset H5 C LightGBM: OK
+Fit onset H5 C SMARTBoost: OK
+Fit onset H5 ALL Logit: OK
+Fit onset H5 ALL LightGBM: OK
+Fit onset H5 ALL SMARTBoost: OK
+Fit onset H10 P Logit: OK
+Fit onset H10 P LightGBM: OK
+Fit onset H10 P SMARTBoost: OK
+Fit onset H10 M Logit: OK
+Fit onset H10 M LightGBM: OK
+Fit onset H10 M SMARTBoost: OK
+Fit onset H10 C Logit: OK
+Fit onset H10 C LightGBM: OK
+Fit onset H10 C SMARTBoost: OK
+Fit onset H10 ALL Logit: OK
+Fit onset H10 ALL LightGBM: OK
+Fit onset H10 ALL SMARTBoost: OK
+Fit continuation H5 P Logit: OK
+Fit continuation H5 P LightGBM: OK
+Fit continuation H5 P SMARTBoost: OK
+Fit continuation H5 M Logit: OK
+Fit continuation H5 M LightGBM: OK
+Fit continuation H5 M SMARTBoost: OK
+Fit continuation H5 C Logit: OK
+Fit continuation H5 C LightGBM: OK
+Fit continuation H5 C SMARTBoost: OK
+Fit continuation H5 ALL Logit: OK
+Fit continuation H5 ALL LightGBM: OK
+Fit continuation H5 ALL SMARTBoost: OK
+Fit continuation H10 P Logit: OK
+Fit continuation H10 P LightGBM: OK
+Fit continuation H10 P SMARTBoost: OK
+Fit continuation H10 M Logit: OK
+Fit continuation H10 M LightGBM: OK
+Fit continuation H10 M SMARTBoost: OK
+Fit continuation H10 C Logit: OK
+Fit continuation H10 C LightGBM: OK
+Fit continuation H10 C SMARTBoost: OK
+Fit continuation H10 ALL Logit: OK
+Fit continuation H10 ALL LightGBM: OK
+Fit continuation H10 ALL SMARTBoost: OK
+Wrote onset_baseline_report.md and inclusion_decision_note.md

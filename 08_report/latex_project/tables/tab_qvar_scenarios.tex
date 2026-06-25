@@ -1,0 +1,22 @@
+\begin{table}[H]
+\centering
+\caption{QVAR 压力测试情景设定}
+\label{tab:qvar-scenarios}
+\small
+\begin{threeparttable}
+\begin{tabularx}{\textwidth}{p{0.18\textwidth}p{0.34\textwidth}Y}
+\toprule
+情景 & 标准化冲击 & 经济含义 \\
+\midrule
+市场急跌 & IndexRet = -2.0 & 模拟市场收益显著下行。 \\
+波动放大 & IndexRV = +2.0 & 模拟指数波动显著上升。 \\
+成交收缩 & MarketRelAmt = -2.0 & 模拟成交承接能力下降。 \\
+复合压力 & IndexRet = -2.0, IndexRV = +2.0, MarketRelAmt = -2.0 & 模拟价格、波动与成交承接同时恶化。 \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item 注：冲击为标准化情景模拟，不代表严格因果识别。
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

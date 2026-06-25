@@ -1,0 +1,7 @@
+﻿parameter,estimate
+omega,0.05494332623447304
+alpha_market_lsi_shock,0.45
+beta_persistence,0.24607916070335614
+gamma_index_rv_proxy,0.0
+alpha_plus_beta,0.6960791607033562
+normal_loglik_objective,-0.39441843119303

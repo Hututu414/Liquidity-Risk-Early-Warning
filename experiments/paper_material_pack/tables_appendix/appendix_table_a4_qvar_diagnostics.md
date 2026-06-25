@@ -1,0 +1,26 @@
+| section | diagnostic | value | status | feature | family | uses_crossstress | time_boundary |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| diagnostics | refit_count | 1 | OK_base_train_predetermined |  |  |  |  |
+| diagnostics | rows | 174,000 | OK |  |  |  |  |
+| diagnostics | crossstress_used | 0 | OK |  |  |  |  |
+| feature_manifest |  |  |  | qvar_mlsi_q50 | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_mlsi_q90 | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_mlsi_q95 | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_tail_spread_90_50 | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_tail_spread_95_50 | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_tail_slope_95_90 | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_tail_surprise_90 | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_tail_surprise_95 | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_tail_accel_5 | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_tail_accel_20 | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_contrib_mlsi_q90 | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_contrib_ret_q90 | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_contrib_rv_q90 | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_contrib_relamt_q90 | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_contrib_mlsi_q95 | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_contrib_ret_q95 | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_contrib_rv_q95 | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_contrib_relamt_q95 | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_high_tail_state | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_tail_acceleration_state | QVAR | False | base_train_predetermined |
+| feature_manifest |  |  |  | qvar_composite_tail_state | QVAR | False | base_train_predetermined |

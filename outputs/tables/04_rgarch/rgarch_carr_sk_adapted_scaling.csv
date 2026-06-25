@@ -1,0 +1,7 @@
+﻿variable,scale,source
+pressure_innovation_raw,6.241630379193445,train_std
+sqrt_RV_pressure,16.17917307724465,train_median_sqrt_measure
+sqrt_RBV_pressure,8.871028414935507,train_median_sqrt_measure
+sqrt_MedRV_pressure,7.458273759861104,train_median_sqrt_measure
+sqrt_RMAD_pressure,8.87970517460407,train_median_sqrt_measure
+sqrt_RVaR_pressure_optional,2.78256706528019,train_median_sqrt_measure

@@ -1,0 +1,505 @@
+# CLEANUP_REPORT
+
+- Cleanup time: 2026-06-20 22:08:26
+- Workspace root: `D:\Users\TtT20\source\repos\金融科技大作业\fintech_hft_liquidity_agent_workspace_v1_agent_only`
+- Final main TeX: `D:\Users\TtT20\source\repos\金融科技大作业\fintech_hft_liquidity_agent_workspace_v1_agent_only\report\latex_project\main_v2_final_parameter_tables_significance.tex`
+- Final PDF: `D:\Users\TtT20\source\repos\金融科技大作业\fintech_hft_liquidity_agent_workspace_v1_agent_only\report\latex_project\main_v2_final_parameter_tables_significance.pdf`
+
+## Backup
+
+- Validated backup zip: `D:\Users\TtT20\source\repos\金融科技大作业\fintech_hft_liquidity_agent_workspace_before_cleanup_20260620_220102.zip`
+- Backup zip size: 17007889259 bytes
+- Backup validation: PASS (`ZipFile.testzip()` returned no bad entry)
+
+## Keep Files
+
+- `outputs/figures/07_robustness/qvar_scenario_sensitivity/qvar_sensitivity_quantile_cum_abs_shock2.png`
+- `report/latex_project/build_report.ps1`
+- `report/latex_project/main_v2_final_parameter_tables_significance.tex`
+- `report/latex_project/main_v2_final_parameter_tables_significance.pdf`
+- `report/latex_project/refs.bib`
+- `report/latex_project/figures/fig_corr.png`
+- `report/latex_project/figures/fig_coverage.png`
+- `report/latex_project/figures/fig_event_rate.png`
+- `report/latex_project/figures/fig_intraday.png`
+- `report/latex_project/figures/fig_marketlsi.png`
+- `report/latex_project/figures/fig_qvar_response.png`
+- `report/latex_project/figures/fig_qvar_stress.png`
+- `report/latex_project/figures/fig_rgarch_dynamic_skewness_refined.png`
+- `report/latex_project/figures/fig_rgarch_realized_measure_distribution_refined.png`
+- `report/latex_project/figures/fig_rgarch_risk.png`
+- `report/latex_project/figures/fig_robust_label_threshold.png`
+- `report/latex_project/figures/fig_robust_sb_topk.png`
+- `report/latex_project/figures/fig_sb_calibration.png`
+- `report/latex_project/figures/fig_sb_partial.png`
+- `report/latex_project/figures/fig_sb_pr.png`
+- `report/latex_project/figures/fig_sb_top5.png`
+- `report/latex_project/figures/fig_timeline.png`
+- `report/latex_project/tables/app_qvar_full_coefficients.tex`
+- `report/latex_project/tables/app_rgarch_full_params.tex`
+- `report/latex_project/tables/tab_qvar_core_coefficients.tex`
+- `report/latex_project/tables/tab_rgarch_core_params.tex`
+- `CLEANUP_REPORT.md` (this report)
+
+## Deleted Directories
+
+- `.agents/`
+- `.claude/`
+- `.codegraph/`
+- `.gemini/`
+- `.roo/`
+- `docs/admin/`
+- `01_materials/`
+- `data_inbox/`
+- `data_intermediate/`
+- `code/`
+- `agent_workspaces/`
+- `reviews/`
+- `report/report_fragments/`
+- `report/latex_project/agent_workspaces/`
+- `report/latex_project/reviews/`
+- `report/latex_project/_layout_audit_render/`
+- `report/latex_project/_wordstyle_audit_render/`
+- `report/latex_project/sections/`
+- `pipeline_logs/`
+- `final_output/`
+- `model_disclosure_tables_preview/`
+- `prompts/`
+- `tmp/`
+
+## Deleted Standalone Files
+
+Files below were removed outside the deleted directory trees above.
+
+- `.rooignore`
+- `.roomodes`
+- `.roorules`
+- `outputs/README_AGENT_OUTPUTS.md`
+- `outputs/descriptive_diagnostics/figures/fig_coverage_heatmap.png`
+- `outputs/descriptive_diagnostics/figures/fig_lsi_intraday.png`
+- `outputs/descriptive_diagnostics/figures/fig_market_lsi_timeseries.png`
+- `outputs/descriptive_diagnostics/figures/fig_market_stress_combined.png`
+- `outputs/descriptive_diagnostics/figures/fig_stress_rate_timeseries.png`
+- `outputs/descriptive_diagnostics/tables/lsi_intraday_by_slot.csv`
+- `outputs/descriptive_diagnostics/tables/lsi_intraday_stats.csv`
+- `outputs/descriptive_diagnostics/tables/market_context_by_datetime.csv`
+- `outputs/descriptive_diagnostics/tables/market_context_diagnostics.csv`
+- `outputs/descriptive_diagnostics/tables/stress_rate_by_date.csv`
+- `outputs/descriptive_diagnostics/tables/summary_statistics_by_code.csv`
+- `outputs/figures/01_data/.gitkeep`
+- `outputs/figures/01_data/fig_coverage_by_exchange_summary.png`
+- `outputs/figures/01_data/fig_refined_coverage_heatmap.pdf`
+- `outputs/figures/01_data/fig_refined_coverage_heatmap.png`
+- `outputs/figures/02_lsi/.gitkeep`
+- `outputs/figures/02_lsi/fig_lsi_intraday_by_stage.png`
+- `outputs/figures/02_lsi/fig_market_lsi_extreme_slot_distribution.png`
+- `outputs/figures/02_lsi/fig_market_lsi_stage_distribution.png`
+- `outputs/figures/02_lsi/fig_refined_lsi_intraday.pdf`
+- `outputs/figures/02_lsi/fig_refined_lsi_intraday.png`
+- `outputs/figures/02_lsi/fig_refined_market_lsi_timeseries.png`
+- `outputs/figures/03_descriptive/.gitkeep`
+- `outputs/figures/03_descriptive/fig_descriptive_01_sample_coverage_heatmap.png`
+- `outputs/figures/03_descriptive/fig_descriptive_02_sample_split_timeline.png`
+- `outputs/figures/03_descriptive/fig_descriptive_03_marketlsi_timeseries.png`
+- `outputs/figures/03_descriptive/fig_descriptive_04_event_rate_h5_h10_timeseries.png`
+- `outputs/figures/03_descriptive/fig_descriptive_05_intraday_pattern.png`
+- `outputs/figures/03_descriptive/fig_descriptive_06_intraday_pattern_by_period.png`
+- `outputs/figures/03_descriptive/fig_descriptive_07_core_variable_distribution.png`
+- `outputs/figures/03_descriptive/fig_descriptive_08_event_rate_period_comparison.png`
+- `outputs/figures/03_descriptive/fig_descriptive_09_correlation_heatmap.png`
+- `outputs/figures/04_rgarch/.gitkeep`
+- `outputs/figures/04_rgarch/fig_refined_rgarch_risk_evolution.png`
+- `outputs/figures/04_rgarch/fig_rgarch_carr_sk_adapted_conditional_risk.png`
+- `outputs/figures/04_rgarch/fig_rgarch_carr_sk_adapted_dynamic_kurtosis.png`
+- `outputs/figures/04_rgarch/fig_rgarch_carr_sk_adapted_dynamic_skewness.png`
+- `outputs/figures/04_rgarch/fig_rgarch_carr_sk_adapted_realized_measures.png`
+- `outputs/figures/04_rgarch/fig_rgarch_conditional_risk_path.png`
+- `outputs/figures/04_rgarch/fig_rgarch_dynamic_skew_kurtosis.png`
+- `outputs/figures/04_rgarch/fig_rgarch_dynamic_skew_kurtosis_refined.png`
+- `outputs/figures/04_rgarch/fig_rgarch_dynamic_skewness_refined.png`
+- `outputs/figures/04_rgarch/fig_rgarch_oos_loss_comparison.png`
+- `outputs/figures/04_rgarch/fig_rgarch_realized_measure_density.png`
+- `outputs/figures/04_rgarch/fig_rgarch_realized_measure_distribution_refined.png`
+- `outputs/figures/05_qvar/.gitkeep`
+- `outputs/figures/05_qvar/fig_qvar_coefficient_heatmap.png`
+- `outputs/figures/05_qvar/fig_qvar_pinball_loss.png`
+- `outputs/figures/05_qvar/fig_qvar_pressure_test_paths.png`
+- `outputs/figures/05_qvar/fig_qvar_response_decay.png`
+- `outputs/figures/05_qvar/fig_qvar_tail_quantile_response.png`
+- `outputs/figures/05_qvar/fig_qvar_tail_response_summary_refined.png`
+- `outputs/figures/06_smartboost/.gitkeep`
+- `outputs/figures/06_smartboost/fig_refined_partial_effects.pdf`
+- `outputs/figures/06_smartboost/fig_refined_partial_effects.png`
+- `outputs/figures/06_smartboost/fig_refined_top5_realized_rate.png`
+- `outputs/figures/06_smartboost/fig_smartboost_calibration_curve.png`
+- `outputs/figures/06_smartboost/fig_smartboost_feature_importance.png`
+- `outputs/figures/06_smartboost/fig_smartboost_lift_curve.png`
+- `outputs/figures/06_smartboost/fig_smartboost_partial_effects.png`
+- `outputs/figures/06_smartboost/fig_smartboost_pr_curve.png`
+- `outputs/figures/06_smartboost/fig_smartboost_pr_roc_by_period.png`
+- `outputs/figures/06_smartboost/fig_smartboost_probability_distribution.png`
+- `outputs/figures/06_smartboost/fig_smartboost_regime_metrics.png`
+- `outputs/figures/06_smartboost/fig_smartboost_roc_curve.png`
+- `outputs/figures/06_smartboost/fig_smartboost_top5_realized_rate.png`
+- `outputs/figures/07_robustness/.gitkeep`
+- `outputs/figures/07_robustness/candidate_qvar_robustness_figures/candidate_a_qvar_fixed_horizon_response.png`
+- `outputs/figures/07_robustness/candidate_qvar_robustness_figures/candidate_b_qvar_cumulative_abs_response_h1_h10.png`
+- `outputs/figures/07_robustness/candidate_qvar_robustness_figures/candidate_c_qvar_quantile_extension_h5_response.png`
+- `outputs/figures/07_robustness/candidate_qvar_robustness_figures/candidate_d_qvar_shock_size_h10_q095_response.png`
+- `outputs/figures/07_robustness/fig_label_threshold_robustness.png`
+- `outputs/figures/07_robustness/fig_qvar_quantile_robustness.png`
+- `outputs/figures/07_robustness/fig_qvar_shock_size_robustness.png`
+- `outputs/figures/07_robustness/fig_rgarch_realized_measure_robustness.png`
+- `outputs/figures/07_robustness/fig_smartboost_feature_ablation.png`
+- `outputs/figures/07_robustness/fig_smartboost_topk_robustness.png`
+- `outputs/figures/07_robustness/qvar_scenario_sensitivity/qvar_sensitivity_direction_stability_heatmap.png`
+- `outputs/figures/07_robustness/qvar_scenario_sensitivity/qvar_sensitivity_fixed_horizon_signed_direction.png`
+- `outputs/figures/07_robustness/qvar_scenario_sensitivity/qvar_sensitivity_shock_size_cum_abs_q095.png`
+- `outputs/figures/99_paper_ready/fig_01_coverage_heatmap.pdf`
+- `outputs/figures/99_paper_ready/fig_01_coverage_heatmap.png`
+- `outputs/figures/99_paper_ready/fig_02_lsi_intraday_pattern.pdf`
+- `outputs/figures/99_paper_ready/fig_02_lsi_intraday_pattern.png`
+- `outputs/figures/99_paper_ready/fig_03_market_lsi_time_series.pdf`
+- `outputs/figures/99_paper_ready/fig_03_market_lsi_time_series.png`
+- `outputs/figures/99_paper_ready/fig_04_rgarch_conditional_pressure_risk.pdf`
+- `outputs/figures/99_paper_ready/fig_04_rgarch_conditional_pressure_risk.png`
+- `outputs/figures/99_paper_ready/fig_05_rgarch_dynamic_skew_kurtosis.pdf`
+- `outputs/figures/99_paper_ready/fig_05_rgarch_dynamic_skew_kurtosis.png`
+- `outputs/figures/99_paper_ready/fig_06_rgarch_realized_pressure_measures.pdf`
+- `outputs/figures/99_paper_ready/fig_06_rgarch_realized_pressure_measures.png`
+- `outputs/figures/99_paper_ready/fig_07_qvar_tail_quantile_response.pdf`
+- `outputs/figures/99_paper_ready/fig_07_qvar_tail_quantile_response.png`
+- `outputs/figures/99_paper_ready/fig_08_qvar_pressure_test_scenarios.pdf`
+- `outputs/figures/99_paper_ready/fig_08_qvar_pressure_test_scenarios.png`
+- `outputs/figures/99_paper_ready/fig_09_smartboost_pr_curve.pdf`
+- `outputs/figures/99_paper_ready/fig_09_smartboost_pr_curve.png`
+- `outputs/figures/99_paper_ready/fig_10_smartboost_roc_curve.pdf`
+- `outputs/figures/99_paper_ready/fig_10_smartboost_roc_curve.png`
+- `outputs/figures/99_paper_ready/fig_11_smartboost_calibration_curve.pdf`
+- `outputs/figures/99_paper_ready/fig_11_smartboost_calibration_curve.png`
+- `outputs/figures/99_paper_ready/fig_12_smartboost_top5_event_rate.pdf`
+- `outputs/figures/99_paper_ready/fig_12_smartboost_top5_event_rate.png`
+- `outputs/figures/99_paper_ready/fig_13_smartboost_partial_effects.pdf`
+- `outputs/figures/99_paper_ready/fig_13_smartboost_partial_effects.png`
+- `outputs/figures/99_paper_ready/paper_figure_rebuild_log.md`
+- `outputs/figures/99_paper_ready/paper_figure_registry.csv`
+- `outputs/figures/in_place_figure_registry.csv`
+- `outputs/logs/.gitkeep`
+- `outputs/tables/01_data/.gitkeep`
+- `outputs/tables/02_lsi/.gitkeep`
+- `outputs/tables/03_descriptive/.gitkeep`
+- `outputs/tables/03_descriptive/descriptive_core_variable_correlation.csv`
+- `outputs/tables/03_descriptive/descriptive_daily_market_context.csv`
+- `outputs/tables/03_descriptive/descriptive_event_rate_by_period.csv`
+- `outputs/tables/03_descriptive/descriptive_intraday_lsi_by_period.csv`
+- `outputs/tables/03_descriptive/descriptive_monthly_event_rate.csv`
+- `outputs/tables/04_rgarch/.gitkeep`
+- `outputs/tables/04_rgarch/rgarch_carr_sk_adapted_conditional_paths.csv`
+- `outputs/tables/04_rgarch/rgarch_carr_sk_adapted_fit_criteria.csv`
+- `outputs/tables/04_rgarch/rgarch_carr_sk_adapted_oos_losses.csv`
+- `outputs/tables/04_rgarch/rgarch_carr_sk_adapted_parameter_estimates.csv`
+- `outputs/tables/04_rgarch/rgarch_carr_sk_adapted_realized_pressure_measures.csv`
+- `outputs/tables/04_rgarch/rgarch_carr_sk_adapted_scaling.csv`
+- `outputs/tables/04_rgarch/rgarch_simplified_daily_risk.csv`
+- `outputs/tables/04_rgarch/rgarch_simplified_parameter_summary.csv`
+- `outputs/tables/04_rgarch/rgarch_simplified_period_summary.csv`
+- `outputs/tables/04_rgarch/rgarch_simplified_risk_path.csv`
+- `outputs/tables/05_qvar/.gitkeep`
+- `outputs/tables/05_qvar/qvar_blocked_oos_pinball_loss.csv`
+- `outputs/tables/05_qvar/qvar_pressure_test_paths.csv`
+- `outputs/tables/05_qvar/qvar_pressure_test_scenario_definitions.csv`
+- `outputs/tables/05_qvar/qvar_quantile_coefficients_train.csv`
+- `outputs/tables/05_qvar/qvar_quantile_coefficients_train_plus_validation.csv`
+- `outputs/tables/05_qvar/qvar_tail_quantile_response.csv`
+- `outputs/tables/05_qvar/qvar_train_standardization_stats.csv`
+- `outputs/tables/06_smartboost/.gitkeep`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_000002_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_000063_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_000333_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_000568_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_000651_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_000661_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_000725_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_000792_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_000858_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_000895_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_002027_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_002304_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_002352_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_002371_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_002415_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_002460_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_002475_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_002594_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_002812_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_300014_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_300015_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_300059_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_300122_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_300124_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_300274_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_300498_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_300750_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_300760_SZ.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600009_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600011_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600018_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600019_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600028_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600030_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600031_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600036_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600048_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600050_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600089_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600104_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600196_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600276_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600309_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600406_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600436_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600519_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600570_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600588_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600690_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600809_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600887_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600900_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_600919_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601012_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601088_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601111_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601166_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601186_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601211_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601238_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601288_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601318_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601328_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601390_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601398_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601600_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601601_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601633_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601668_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601688_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601766_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601857_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601888_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_601899_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_603259_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_603288_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_603501_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_603799_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_603806_SH.parquet`
+- `outputs/tables/06_smartboost/predictions_by_code/smartboost_predictions_688981_SH.parquet`
+- `outputs/tables/06_smartboost/smartboost_best_iterations.csv`
+- `outputs/tables/06_smartboost/smartboost_calibration_table.csv`
+- `outputs/tables/06_smartboost/smartboost_event_rate_and_lift.csv`
+- `outputs/tables/06_smartboost/smartboost_feature_importance.csv`
+- `outputs/tables/06_smartboost/smartboost_high_risk_group_rates.csv`
+- `outputs/tables/06_smartboost/smartboost_iteration_selection.csv`
+- `outputs/tables/06_smartboost/smartboost_metrics.csv`
+- `outputs/tables/06_smartboost/smartboost_model_metadata.json`
+- `outputs/tables/06_smartboost/smartboost_partial_effects.csv`
+- `outputs/tables/06_smartboost/smartboost_prediction_integrity_check.csv`
+- `outputs/tables/06_smartboost/smartboost_prediction_manifest.csv`
+- `outputs/tables/06_smartboost/smartboost_regime_metrics.csv`
+- `outputs/tables/06_smartboost/smartboost_training_sample_summary.csv`
+- `outputs/tables/07_robustness/.gitkeep`
+- `outputs/tables/07_robustness/horizon_robustness.csv`
+- `outputs/tables/07_robustness/label_threshold_robustness.csv`
+- `outputs/tables/07_robustness/missing_minute_threshold_robustness.csv`
+- `outputs/tables/07_robustness/qvar_quantile_robustness.csv`
+- `outputs/tables/07_robustness/qvar_scenario_sensitivity/qvar_marketlsi_equation_coefficients_audit.csv`
+- `outputs/tables/07_robustness/qvar_scenario_sensitivity/qvar_scenario_direction_stability.csv`
+- `outputs/tables/07_robustness/qvar_scenario_sensitivity/qvar_scenario_original_path_comparison.csv`
+- `outputs/tables/07_robustness/qvar_scenario_sensitivity/qvar_scenario_sensitivity_paths.csv`
+- `outputs/tables/07_robustness/qvar_scenario_sensitivity/qvar_scenario_sensitivity_summary.csv`
+- `outputs/tables/07_robustness/qvar_shock_size_robustness.csv`
+- `outputs/tables/07_robustness/rgarch_oos_loss_robustness.csv`
+- `outputs/tables/07_robustness/rgarch_realized_measure_robustness.csv`
+- `outputs/tables/07_robustness/smartboost_calibration_robustness.csv`
+- `outputs/tables/07_robustness/smartboost_feature_ablation.csv`
+- `outputs/tables/07_robustness/smartboost_time_split_robustness.csv`
+- `outputs/tables/07_robustness/smartboost_topk_robustness.csv`
+- `outputs/tables/07_robustness/standardization_robustness.csv`
+- `report/latex_project.zip`
+- `report/latex_project/README_AGENT_GENERATES_LATEX_HERE.md`
+- `report/latex_project/content_expansion_audit.md`
+- `report/latex_project/figure_table_map.md`
+- `report/latex_project/figures/.gitkeep`
+- `report/latex_project/figures/candidate_b_qvar_cumulative_abs_response_h1_h10.png`
+- `report/latex_project/figures/fig_descriptive_01_sample_coverage_heatmap.png`
+- `report/latex_project/figures/fig_distribution.png`
+- `report/latex_project/figures/fig_qvar_pinball.png`
+- `report/latex_project/figures/fig_qvar_tail_response_summary_refined.png`
+- `report/latex_project/figures/fig_rgarch_dynamic_skew_kurtosis_refined.png`
+- `report/latex_project/figures/fig_rgarch_loss.png`
+- `report/latex_project/figures/fig_rgarch_realized.png`
+- `report/latex_project/figures/fig_rgarch_skew_kurt.png`
+- `report/latex_project/figures/fig_robust_qvar_shock.png`
+- `report/latex_project/figures/fig_robust_rgarch_measure.png`
+- `report/latex_project/figures/fig_robust_sb_ablation.png`
+- `report/latex_project/main_v2_final_parameter_tables_significance.aux`
+- `report/latex_project/main_v2_final_parameter_tables_significance.bbl`
+- `report/latex_project/main_v2_final_parameter_tables_significance.blg`
+- `report/latex_project/main_v2_final_parameter_tables_significance.log`
+- `report/latex_project/main_v2_final_parameter_tables_significance.out`
+- `report/latex_project/main_v2_final_parameter_tables_significance.synctex.gz`
+- `report/latex_project/main_v2_final_parameter_tables_significance.toc`
+- `report/latex_project/main_v2_final_wordstyle.aux`
+- `report/latex_project/main_v2_final_wordstyle.bbl`
+- `report/latex_project/main_v2_final_wordstyle.blg`
+- `report/latex_project/main_v2_final_wordstyle.log`
+- `report/latex_project/main_v2_final_wordstyle.out`
+- `report/latex_project/main_v2_final_wordstyle.pdf`
+- `report/latex_project/main_v2_final_wordstyle.tex`
+- `report/latex_project/main_v2_final_wordstyle.toc`
+- `report/latex_project/tables/.gitkeep`
+- `report/latex_project/tables/tab_label_distribution.tex`
+- `report/latex_project/tables/tab_model_framework.tex`
+- `report/latex_project/tables/tab_qvar_pinball.tex`
+- `report/latex_project/tables/tab_qvar_scenarios.tex`
+- `report/latex_project/tables/tab_rgarch_fit_loss.tex`
+- `report/latex_project/tables/tab_robustness_summary.tex`
+- `report/latex_project/tables/tab_sample_cleaning.tex`
+- `report/latex_project/tables/tab_smartboost_leakage.tex`
+- `report/latex_project/tables/tab_smartboost_metrics.tex`
+- `report/latex_project/tables/tab_smartboost_topk.tex`
+- `report/latex_project/tables/tab_variable_definition.tex`
+- `report/latex_project/terminology_cn_layout_insert_audit.md`
+- `report/latex_project/金融科技学课程论文封面.docx`
+- `CODEX.md`
+- `DEEPSEEK_ROO.md`
+- `GEMINI.md`
+- `README.md`
+- `ROO_CODE.md`
+- `concat_draft.py`
+- `generate_tex.py`
+- `run_stage0_verify_input.ps1`
+- `run_stage1_make_model_ready_panel.ps1`
+- `run_stage2_make_lsi_labels.ps1`
+- `run_stage3_descriptive_diagnostics.ps1`
+
+## Removed Empty Directories
+
+- `outputs/figures/07_robustness/candidate_qvar_robustness_figures/`
+- `outputs/tables/07_robustness/qvar_scenario_sensitivity/`
+- `outputs/tables/06_smartboost/predictions_by_code/`
+- `outputs/descriptive_diagnostics/figures/`
+- `outputs/descriptive_diagnostics/tables/`
+- `outputs/descriptive_diagnostics/`
+- `outputs/figures/03_descriptive/`
+- `outputs/figures/99_paper_ready/`
+- `outputs/tables/03_descriptive/`
+- `outputs/figures/06_smartboost/`
+- `outputs/tables/06_smartboost/`
+- `outputs/tables/07_robustness/`
+- `outputs/figures/04_rgarch/`
+- `outputs/tables/04_rgarch/`
+- `outputs/figures/01_data/`
+- `outputs/figures/05_qvar/`
+- `outputs/figures/02_lsi/`
+- `outputs/tables/01_data/`
+- `outputs/tables/05_qvar/`
+- `outputs/tables/02_lsi/`
+- `outputs/tables/`
+- `outputs/logs/`
+
+## Retained But Uncertain
+
+- `.git/`: root version-control directory; default .git preservation rule
+- `report/latex_project/.git/`: nested .git directory; retained under default .git preservation rule
+- `.gitignore`: version-control ignore metadata, not a TeX dependency
+- `AGENTS.md`: project control instructions, not a TeX dependency
+
+## Dependency Scan Result
+
+- Missing TeX/image/table/bibliography dependencies before cleanup: none found.
+- Local `.sty`, `.cls`, `.bst` dependencies: none found; packages/class/style resolved from TeX Live/system installation.
+- Cross-directory dependency retained: `outputs/figures/07_robustness/qvar_scenario_sensitivity/qvar_sensitivity_quantile_cum_abs_shock2.png`, because the main TeX references `../../outputs/...` directly.
+
+## Compile Verification
+
+- Command: `latexmk -xelatex -interaction=nonstopmode -halt-on-error main_v2_final_parameter_tables_significance.tex`
+- Result: PASS, exit code 0.
+- Generated PDF exists: YES
+- PDF size: 4395253 bytes
+- Final log checks before auxiliary cleanup: no matched `missing file`, `undefined control sequence`, `undefined references`, `undefined citation`, bibliography missing, LaTeX error, or package error patterns.
+- Post-verification cleanup: compilation auxiliaries (`.aux`, `.bbl`, `.blg`, `.log`, `.out`, `.toc`, `.fls`, `.fdb_latexmk`, `.xdv`) were removed; final PDF retained.
+
+## Remaining Non-Git Files
+
+- `.gitignore`
+- `outputs/figures/07_robustness/qvar_scenario_sensitivity/qvar_sensitivity_quantile_cum_abs_shock2.png`
+- `report/latex_project/build_report.ps1`
+- `report/latex_project/figures/fig_corr.png`
+- `report/latex_project/figures/fig_coverage.png`
+- `report/latex_project/figures/fig_event_rate.png`
+- `report/latex_project/figures/fig_intraday.png`
+- `report/latex_project/figures/fig_marketlsi.png`
+- `report/latex_project/figures/fig_qvar_response.png`
+- `report/latex_project/figures/fig_qvar_stress.png`
+- `report/latex_project/figures/fig_rgarch_dynamic_skewness_refined.png`
+- `report/latex_project/figures/fig_rgarch_realized_measure_distribution_refined.png`
+- `report/latex_project/figures/fig_rgarch_risk.png`
+- `report/latex_project/figures/fig_robust_label_threshold.png`
+- `report/latex_project/figures/fig_robust_sb_topk.png`
+- `report/latex_project/figures/fig_sb_calibration.png`
+- `report/latex_project/figures/fig_sb_partial.png`
+- `report/latex_project/figures/fig_sb_pr.png`
+- `report/latex_project/figures/fig_sb_top5.png`
+- `report/latex_project/figures/fig_timeline.png`
+- `report/latex_project/main_v2_final_parameter_tables_significance.pdf`
+- `report/latex_project/main_v2_final_parameter_tables_significance.tex`
+- `report/latex_project/refs.bib`
+- `report/latex_project/tables/app_qvar_full_coefficients.tex`
+- `report/latex_project/tables/app_rgarch_full_params.tex`
+- `report/latex_project/tables/tab_qvar_core_coefficients.tex`
+- `report/latex_project/tables/tab_rgarch_core_params.tex`
+- `AGENTS.md`
+- `CLEANUP_REPORT.md`
+
+## Reproducibility Restore
+
+After the initial final-paper-only cleanup, the workspace was restored from the validated backup to preserve reproducibility.
+
+Restored scope:
+
+- `docs/admin/`
+- `data_inbox/`
+- `data_intermediate/`
+- `code/`
+- `outputs/`
+- `report/report_fragments/`
+- `report/latex_project/figures/`
+- `report/latex_project/tables/`
+- `report/latex_project/sections/`
+- `pipeline_logs/`
+- `final_output/`
+- `README.md`
+- `CODEX.md`
+- `concat_draft.py`
+- `generate_tex.py`
+- `run_stage0_verify_input.ps1`
+- `run_stage1_make_model_ready_panel.ps1`
+- `run_stage2_make_lsi_labels.ps1`
+- `run_stage3_descriptive_diagnostics.ps1`
+
+Restore result:
+
+- Restored files: 952.
+- Restored bytes: 15,864,867,127.
+- Restored from backup: `D:\Users\TtT20\source\repos\金融科技大作业\fintech_hft_liquidity_agent_workspace_before_cleanup_20260620_220102.zip`.
+- Python `__pycache__` directories restored from the backup were removed again because they are cache artifacts, not reproducibility inputs.
+- Agent and workflow residue was still not restored: `.agents/`, `.claude/`, `.codegraph/`, `.gemini/`, `.roo/`, `agent_workspaces/`, `reviews/`, `prompts/`, and `tmp/`.
+
+Post-restore compile verification:
+
+- `latexmk -xelatex` was attempted once after restore but stopped at a runner/spawn-level error without a TeX missing-file or syntax error in the log.
+- Manual compile sequence completed successfully: `xelatex`, `bibtex`, `xelatex`, `xelatex`.
+- Final PDF after restore: `D:\Users\TtT20\source\repos\金融科技大作业\fintech_hft_liquidity_agent_workspace_v1_agent_only\report\latex_project\main_v2_final_parameter_tables_significance.pdf`.
+- Final PDF size after restore: 4,395,255 bytes.
+- Final log scan before auxiliary cleanup found no missing file, undefined control sequence, undefined references/citations, bibliography missing, LaTeX error, package error, emergency stop, or fatal error patterns.
+- Post-verification LaTeX auxiliary files were removed again.

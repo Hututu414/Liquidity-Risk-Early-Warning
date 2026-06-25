@@ -1,0 +1,7 @@
+﻿standardization,period,H5_threshold_train_p90,notes,rows,LSI_5_mean,LSI_5_std,LSI_5_p95,H5_event_rate
+median/MAD_train_code_slot_baseline,test,,基准 stage2 标准化；参数来自训练期 code-slot median/MAD。,2713506,-0.3771529394731693,10.116327758421681,5.090725527755595,0.05446483939886093
+median/MAD_train_code_slot_baseline,train,,基准 stage2 标准化；参数来自训练期 code-slot median/MAD。,8118163,1.5832682971149399,10.357591651719206,8.26278138362035,0.09999707341194153
+median/MAD_train_code_slot_baseline,validation,,基准 stage2 标准化；参数来自训练期 code-slot median/MAD。,2711689,-0.19089631921788627,10.563043252252669,4.970293048107438,0.05050099641084671
+mean/std_train_code_slot,test,3.86258368309736,替代标准化参数仅由训练期 code-slot mean/std 估计；未改变主模型。,2713506,-1.4378695722243884,4.637338165194223,1.541748865311847,0.0436259909305472
+mean/std_train_code_slot,train,3.86258368309736,替代标准化参数仅由训练期 code-slot mean/std 估计；未改变主模型。,8118163,1.6472565752426982e-17,2.252942385015308,3.8706832154588886,0.0999863056107556
+mean/std_train_code_slot,validation,3.86258368309736,替代标准化参数仅由训练期 code-slot mean/std 估计；未改变主模型。,2711689,-1.191112841000023,4.181567319605192,1.6815983087759343,0.041796877253827

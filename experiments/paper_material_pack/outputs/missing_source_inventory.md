@@ -1,0 +1,6 @@
+| missing_source | handling |
+| --- | --- |
+| experiments/onset_baseline_check/outputs/final_full_result_digest.md | recorded as missing; no values fabricated |
+| report/latex_project/main.tex | recorded as missing; no values fabricated |
+| report/latex_project/main_v2_final.tex | recorded as missing; no values fabricated |
+| report/latex_project/main_v2_final_parameter_tables_significance.tex | recorded as missing; no values fabricated |

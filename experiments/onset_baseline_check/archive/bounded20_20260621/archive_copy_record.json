@@ -1,0 +1,31 @@
+﻿{
+    "archive":  "D:\\Users\\TtT20\\source\\repos\\金融科技大作业\\fintech_hft_liquidity_agent_workspace_v1_agent_only\\experiments\\onset_baseline_check\\archive\\bounded20_20260621",
+    "copied":  [
+                   "experiments\\onset_baseline_check\\outputs\\bounded20_result_digest.md",
+                   "experiments\\onset_baseline_check\\outputs\\cloud_run_summary.md",
+                   "experiments\\onset_baseline_check\\outputs\\onset_baseline_report.md",
+                   "experiments\\onset_baseline_check\\outputs\\inclusion_decision_note.md",
+                   "experiments\\onset_baseline_check\\outputs\\model_comparison_summary.csv",
+                   "experiments\\onset_baseline_check\\outputs\\delta_vs_persistence.csv",
+                   "experiments\\onset_baseline_check\\outputs\\topk_lift_table.csv",
+                   "experiments\\onset_baseline_check\\checkpoints\\manifest.json",
+                   "experiments/onset_baseline_check/logs/bounded20_process.json",
+                   "experiments/onset_baseline_check/logs/bounded20_retry_combined.log",
+                   "experiments/onset_baseline_check/logs/bounded20_retry_exit.json",
+                   "experiments/onset_baseline_check/logs/bounded20_stderr.log",
+                   "experiments/onset_baseline_check/logs/bounded20_stdout.log",
+                   "experiments/onset_baseline_check/logs/run_20260621_102109.log",
+                   "experiments/onset_baseline_check/logs/run_20260621_102139.log",
+                   "experiments/onset_baseline_check/logs/run_20260621_104544.log",
+                   "experiments/onset_baseline_check/logs/run_20260621_110616.log",
+                   "experiments/onset_baseline_check/logs/run_20260621_110744.log",
+                   "experiments/onset_baseline_check/logs/run_20260621_110954.log",
+                   "experiments/onset_baseline_check/logs/run_20260621_111054.log",
+                   "experiments/onset_baseline_check/logs/run_20260621_114804.log",
+                   "experiments/onset_baseline_check/logs/run_20260621_115350.log"
+               ],
+    "missing":  [
+
+                ],
+    "created_at":  "2026-06-21T12:11:01.0642161+08:00"
+}

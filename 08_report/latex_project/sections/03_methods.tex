@@ -1,0 +1,209 @@
+\section{研究设计与方法}
+
+本章集中说明本文如何把分钟级市场状态变量转化为短时压力预警框架。本文基于 1 分钟 OHLCV 与成交额数据构造短时流动性压力代理指标，重点刻画市场成交、价格振幅、局部波动和成交承接状态共同反映的短时压力变化。基于这一定位，本文形成三层递进证据链：第一，构造 LSI、MarketLSI 与未来压力标签，形成可验证的预测目标；第二，使用 RGARCH-CARR-SK 与 QVAR 分别刻画动态压力风险和尾部分位传导；第三，使用 SMARTBoost 检验无泄漏历史特征对未来压力事件的样本外预警能力。
+
+\subsection{总体研究框架}
+
+本文的研究设计围绕“分钟级市场状态信息能否预警未来 5 分钟和 10 分钟短时流动性压力”展开。本文基于 1 分钟 OHLCV 与成交额数据构造短时流动性压力代理指标，重点刻画市场成交、价格振幅、局部波动和成交承接状态共同反映的短时压力变化。基于这一定位，本文形成三层递进证据链：第一，构造 LSI、MarketLSI 与未来压力标签，形成可验证的预测目标；第二，使用 RGARCH-CARR-SK 与 QVAR 分别刻画动态压力风险和尾部分位传导；第三，使用 SMARTBoost 检验无泄漏历史特征对未来压力事件的样本外预警能力。
+
+表 \ref{tab:model-framework} 已概括三类模型的功能分工。需要强调的是，RGARCH-CARR-SK 与 QVAR 不是最终预警模型，而是分别提供动态风险刻画和尾部分位联动证据；SMARTBoost 才直接检验历史分钟级状态变量对未来压力事件的样本外排序能力。
+
+\subsection{LSI 指数与未来压力标签}
+
+LSI 的构造首先依赖分钟价格变动。对每只股票 $i$ 和分钟 $t$，本文用相邻分钟收盘价的对数差定义分钟收益率：
+
+\begin{equation}
+r_{i,t}=\log C_{i,t}-\log C_{i,t-1}.
+\end{equation}
+
+其中，$C_{i,t}$ 为股票 $i$ 在分钟 $t$ 的收盘价。该变量不是最终压力指标，而是后续构造局部波动、价格冲击和 realized measure 的基础。跨交易日的第一分钟收益率不进行跨日连接，以避免隔夜信息混入分钟级压力测度。
+
+短时流动性压力并不只体现为价格下跌，也可能体现为同等成交额下更大的价格冲击、更宽的价格振幅、更高的局部波动以及成交承接能力下降。因此，本文在窗口 $k$ 内构造四类基础变量：
+
+\begin{equation}
+\mathrm{ILLIQ}^{(k)}_{i,t}, \quad \mathrm{Range}^{(k)}_{i,t}, \quad \mathrm{RV}^{(k)}_{i,t}, \quad \mathrm{RelAmt}^{(k)}_{i,t}.
+\end{equation}
+
+其中，$\mathrm{ILLIQ}$ 刻画单位成交额对应的价格冲击，$\mathrm{Range}$ 刻画窗口内高低价振幅，$\mathrm{RV}$ 刻画窗口内收益波动，$\mathrm{RelAmt}$ 刻画当前成交额相对历史基准的承接强弱。四类变量分别对应价格冲击、价格区间、局部波动和成交承接四个维度，避免将压力状态简化为单一收益率或单一成交量信号。
+
+由于不同股票的价格水平、交易活跃度和日内交易节奏差异很大，本文不直接相加原始变量，而是使用训练期内股票—日内 slot 层面的中位数和 MAD 进行稳健标准化：
+
+\begin{equation}
+z(x_{i,t})=\frac{x_{i,t}-\operatorname{Median}_{\mathrm{train},\mathrm{slot}}(x_i)}
+{\operatorname{MAD}_{\mathrm{train},\mathrm{slot}}(x_i)+\varepsilon}.
+\end{equation}
+
+这种标准化方式有两层含义：第一，中位数和 MAD 对极端值更稳健；第二，只使用训练期历史分布，避免验证集和测试集信息进入标准化参数。按日内 slot 标准化也能缓解开盘、午后开盘和尾盘天然交易强度差异带来的偏误。
+
+在得到四类标准化变量后，本文将压力上升方向统一后合成为 LSI：
+
+\begin{equation}
+\LSI^{(k)}_{i,t}
+=
+z(\mathrm{ILLIQ}^{(k)}_{i,t})
++
+z(\mathrm{Range}^{(k)}_{i,t})
++
+z(\mathrm{RV}^{(k)}_{i,t})
+-
+z(\mathrm{RelAmt}^{(k)}_{i,t}).
+\end{equation}
+
+式中 $\mathrm{RelAmt}$ 前取负号，是因为成交承接能力相对下降通常意味着同样价格变动下市场吸收能力变弱，从而对应更高的流动性压力。由此得到的 LSI 是成交后市场状态的压力代理指标，不应解释为订单簿深度或买卖价差的直接观测。
+
+个股 LSI 反映单只股票的局部压力，市场层面的共同压力则通过横截面聚合得到：
+
+\begin{equation}
+\MarketLSI_t=\frac{1}{N_t}\sum_{i=1}^{N_t} \LSI^{(5)}_{i,t}.
+\end{equation}
+
+MarketLSI 用于描述样本股票整体压力状态，并作为 RGARCH-CARR-SK 与 QVAR 的核心市场压力变量。该指标仅使用当前及历史分钟信息，不包含未来压力标签。
+
+最后，本文把预警任务转化为未来窗口内压力事件识别问题。对预测窗口 $H\in\{5,10\}$，未来压力标签定义为：
+
+\begin{equation}
+\StressH_{i,t}
+=
+\mathbb{I}
+\left(
+\max_{1\leq h\leq H} \LSI^{(5)}_{i,t+h}
+\geq c^{\mathrm{train}}_H
+\right),
+\quad H\in\{5,10\}.
+\end{equation}
+
+该公式中的未来窗口只用于构造预测目标，不能作为预测特征使用。换言之，模型在 $t$ 时点只能看到 $t$ 及以前的信息，目标是判断 $t$ 之后 5 分钟或 10 分钟内 LSI 是否进入训练期定义的高压力区域。
+
+\subsection{RGARCH-CARR-SK 动态压力风险模型}
+
+RGARCH-CARR-SK 的作用不是直接进行机器学习预警，而是刻画 MarketLSI 压力序列的动态风险路径。该框架借鉴 RGARCH-CARR-SK 原文中 realized measure 驱动的风险递推思想，将高频测度引入条件风险更新过程，并进一步允许压力创新分布具有动态偏度；动态峰度项仅作为模型允许的分布形状诊断扩展。
+
+\begin{equation}
+r_t=\rho\lambda_t z_t.
+\end{equation}
+
+在原模型中，$r_t$ 表示资产收益率；在本文中，$r_t$ 被解释为 MarketLSI 的压力创新。$\lambda_t$ 表示条件压力风险水平，$z_t$ 为标准化压力创新。该式的作用是把观测到的压力变化分解为条件风险尺度和标准化创新两部分。
+
+\begin{equation}
+\log \lambda_t
+=
+\omega
++
+\beta \log \lambda_{t-1}
++
+\gamma \log y_{t-1}
++
+d(z_{t-1}).
+\end{equation}
+
+该式是 RGARCH-CARR-SK 在本文中最核心的动态风险递推。$\lambda_t$ 由上一期条件风险、上一期 realized pressure measure 以及上一期压力创新的杠杆项共同决定。$\beta$ 刻画压力风险的持续性，$\gamma$ 刻画 realized pressure measure 对风险更新的贡献，$d(z_{t-1})$ 则允许正负压力创新对后续风险产生不对称影响。
+
+\begin{equation}
+y_t=\lambda_t u_t.
+\end{equation}
+
+其中 $y_t$ 是由 MarketLSI 构造的 realized pressure measure。本文比较 RV、RBV、MedRV 与 RMAD 四类测度，是为了检验条件压力风险路径是否依赖某一种 realized measure 口径。$u_t$ 表示测度方程中的扰动项。
+
+\begin{equation}
+s_t=\omega_1+\beta_1s_{t-1}+\nu_1 z_{t-1}.
+\end{equation}
+
+动态偏度 $s_t$ 用于刻画压力创新分布的非对称性。如果压力状态下负向市场信息和成交承接收缩更容易引发极端压力，则压力创新分布可能出现偏斜。该项使模型不仅描述风险水平，也描述风险分布形状。
+
+\begin{equation}
+k_t=\omega_2+\beta_2k_{t-1}+\nu_2 |z_{t-1}|.
+\end{equation}
+
+动态峰度 $k_t$ 属于 RGARCH-CARR-SK 框架允许的高阶矩扩展。本文仅将其作为模型诊断信息保留，不把 $k_t$ 的路径解释为独立的市场事件识别，也不将其作为本文核心经验发现。
+
+\begin{equation}
+d(z_t)=d_1 z_t+d_2(z_t^2-1).
+\end{equation}
+
+杠杆函数用于描述压力创新对下一期风险的非线性影响。$d_1$ 反映创新方向的影响，$d_2$ 反映创新幅度偏离正常水平后的风险修正。对于本文而言，该项的作用是允许 MarketLSI 压力创新以非线性方式进入条件压力风险递推。
+
+因此，RGARCH-CARR-SK 在本文中的定位是动态压力风险度量：它回答的是 MarketLSI 压力风险是否具有持续性、是否受到 realized pressure measure 驱动，以及压力创新是否存在非对称性诊断特征。它不是收益率预测模型，也不是本文最终的事件预警模型。
+
+\subsection{QVAR 尾部分位传导模型}
+
+RGARCH-CARR-SK 关注单一 MarketLSI 压力风险路径，而 QVAR 进一步关注 MarketLSI、市场收益、市场波动和成交承接状态之间的动态联动。由于压力事件本身具有尾部属性，本文不只考察条件均值关系，而是使用 QVAR 描述不同分位点下的条件响应。
+
+\begin{equation}
+Y_t = (\MarketLSI_t, \IndexRet_t, \IndexRV_t, \MarketRelAmt_t)'.
+\end{equation}
+
+该向量包含本文关注的核心市场共同状态变量，用以探索压力状态下的联合变动。如果系统中包含 CrossStress，CrossStress 仅作为系统状态变量用于描述截面压力比例，不进入最终 SMARTBoost 预测特征。
+
+\begin{equation}
+Q_{\tau}(Y_t \mid \mathcal{F}_{t-1})
+=
+a(\tau)+A_1(\tau)Y_{t-1},
+\quad
+\tau \in \{0.10,0.50,0.90,0.95\}.
+\end{equation}
+
+$a(\tau)$ 是分位点 $\tau$ 下的截距向量，$A_1(\tau)$ 是一阶滞后系数矩阵。不同 $\tau$ 对应不同市场状态：$\tau=0.50$ 表示中位数状态，$\tau=0.90$ 和 $\tau=0.95$ 更接近压力尾部状态。
+
+\begin{equation}
+\rho_{\tau}(u)=u\left(\tau-\mathbb{I}(u<0)\right).
+\end{equation}
+
+该损失函数对高估和低估给予不对称惩罚，是分位数回归区别于均值回归的核心。与条件均值 VAR 不同，QVAR 关注的是不同分位点下的条件响应关系。本文特别关注 $q=0.90$ 和 $q=0.95$ 的尾部状态，因为短时流动性压力本身具有尾部事件属性。
+
+本文构造四类标准化压力情景：市场急跌、波动放大、成交收缩和复合压力。所有情景均为标准化变量设定，仅用于比较不同市场状态恶化时 MarketLSI 的相对响应路径，不代表真实外生事件的结构识别。QVAR 的估计结果用于描述尾部分位传导和标准化情景响应，下文因此统一使用“情景响应”“条件分位响应”“尾部联动”或“传导路径”等表述。
+
+\subsection{SMARTBoost 样本外预警模型}
+
+RGARCH-CARR-SK 和 QVAR 主要用于风险刻画和传导描述，最终能否预警仍需通过样本外分类任务检验。SMARTBoost 在本文中承担这一角色。本文基于 SMARTBoost 思想进行实证实现，原文将 SMARTBoost 定义为 symmetric smooth additive regression trees 的 boosting 框架，其核心思想是在提升学习中使用平滑对称树作为基学习器，从而在金融经济数据常见的平滑非线性、低信噪比和样本相对有限场景下提高稳定性。本文将这一思想用于二分类压力预警任务。
+
+\begin{equation}
+f(x_i)
+=
+\lambda
+\sum_{b=1}^{B}
+B_b(x_i;\theta_b),
+\end{equation}
+
+其中 $B_b(\cdot)$ 表示第 $b$ 棵平滑对称树，$\lambda$ 为学习率，$B$ 由验证集早停或验证集表现确定。相比普通硬切分树模型，平滑树结构更符合金融状态变量在局部阈值附近连续变化的特征。
+
+\begin{equation}
+\hat p_{H,t}
+=
+P(\StressH=1\mid X_t)
+=
+\Lambda(F_H(X_t)),
+\quad
+H\in\{5,10\},
+\end{equation}
+
+$X_t$ 只包含 $t$ 时点及以前可观测历史特征，预测目标是未来 \(\StressHfive\) 或 \(\StressHten\) 是否发生。$\Lambda(\cdot)$ 为概率映射函数。
+
+\(\StressHfive\)、\(\StressHten\)、\(\FutureMaxLSI\)、CrossStress 不进入最终预测特征矩阵。CrossStress 可以用于 QVAR 的截面状态描述，但不得进入 SMARTBoost。训练、验证和测试样本严格按照时间顺序切分，不进行随机打乱。
+
+\subsection{样本切分、评价指标与防泄漏原则}
+
+本文采用时间顺序切分样本，将较早时期作为训练集，中间时期作为验证集，最后时期作为测试集。训练集用于估计标准化参数、压力标签阈值和模型参数；验证集用于模型选择、早停和调参；测试集仅用于最终样本外评价。
+
+由于压力事件具有不平衡性，本文不以总体准确率作为主要评价指标，而重点报告 PR-AUC、Top-K 高风险组命中率、lift 和 Brier 分数。Top-K 命中率定义为：
+
+\begin{equation}
+\mathrm{HitRate}_{\mathrm{TopK}}
+=
+\frac{1}{|G_K|}
+\sum_{t\in G_K} \mathrm{Stress}_{H,t},
+\end{equation}
+
+其中 $G_K$ 表示预测概率最高的前 K\% 样本。Lift 定义为：
+
+\begin{equation}
+\mathrm{Lift}_{\mathrm{TopK}}
+=
+\frac{\mathrm{HitRate}_{\mathrm{TopK}}}
+{\bar{\mathrm{Stress}}_H}.
+\end{equation}
+
+其中 $\bar{\mathrm{Stress}}_H$ 为对应样本区间的基准事件率。若 $\mathrm{Lift}_{\mathrm{TopK}}>1$，说明模型能够将未来压力事件集中排序到高风险组中；数值越大，预警排序能力越强。
+
+PR-AUC 适合评价稀有事件预警中的高风险排序能力，ROC-AUC 作为辅助指标报告。Brier 分数用于检验概率输出的整体误差，但本文的核心关切不是概率校准本身，而是模型能否将短时压力事件集中识别到高风险排序中。
+
+\FloatBarrier

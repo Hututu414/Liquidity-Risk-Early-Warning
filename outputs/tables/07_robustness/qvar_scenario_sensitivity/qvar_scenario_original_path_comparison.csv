@@ -1,0 +1,2 @@
+﻿rows_compared,merge_statuses,max_abs_diff,mean_abs_diff
+252,both:252; left_only:0; right_only:0,4.440892098500626e-16,4.873058526365007e-17

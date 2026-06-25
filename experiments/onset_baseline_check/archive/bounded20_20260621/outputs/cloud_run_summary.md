@@ -1,0 +1,57 @@
+# Cloud run summary
+
+- status: OK
+- mode: bounded
+- runtime: local
+- git_commit: 30c4aa1
+- python: 3.11.9
+- data_source: model_panel
+- data_path: data\processed\onset_model_panel_bounded20.parquet
+- data_rows: 3473937
+- data_columns: 40
+- started_at: 2026-06-21T11:53:50
+- ended_at: 2026-06-21T11:58:58
+- elapsed_seconds: 308.4
+- resume: True
+- dry_run: False
+- memory: unavailable
+- stock_count_after_cap: 20
+- manifest_rows_after_cap: 20
+- data_range: 2023-05-15 to 2026-05-13
+- gap: 5
+- lookback_clean: 10
+- threshold_quantile: 0.9
+- max_stock_codes: 20
+- bootstrap_iterations: 200
+- checkpoints_read: experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H5_P_Logit.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H5_P_LightGBM.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H5_P_SMARTBoost.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H5_M_Logit.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H5_M_LightGBM.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H5_M_SMARTBoost.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H5_C_Logit.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H5_C_LightGBM.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H5_C_SMARTBoost.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H5_ALL_Logit.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H5_ALL_LightGBM.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H5_ALL_SMARTBoost.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H10_P_Logit.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H10_P_LightGBM.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H10_P_SMARTBoost.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H10_M_Logit.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H10_M_LightGBM.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H10_M_SMARTBoost.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H10_C_Logit.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H10_C_LightGBM.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H10_C_SMARTBoost.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H10_ALL_Logit.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H10_ALL_LightGBM.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_onset_H10_ALL_SMARTBoost.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H5_P_Logit.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H5_P_LightGBM.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H5_P_SMARTBoost.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H5_M_Logit.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H5_M_LightGBM.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H5_M_SMARTBoost.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H5_C_Logit.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H5_C_LightGBM.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H5_C_SMARTBoost.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H5_ALL_Logit.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H5_ALL_LightGBM.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H5_ALL_SMARTBoost.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H10_P_Logit.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H10_P_LightGBM.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H10_P_SMARTBoost.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H10_M_Logit.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H10_M_LightGBM.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H10_M_SMARTBoost.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H10_C_Logit.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H10_C_LightGBM.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H10_C_SMARTBoost.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H10_ALL_Logit.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H10_ALL_LightGBM.joblib, experiments\onset_baseline_check\checkpoints\models\48eca313c32c4033_continuation_H10_ALL_SMARTBoost.joblib
+- stages_recomputed: none
+- next_run_readiness: full-ready after reviewing bounded artifacts, runtime, memory, and data completeness
+
+## Risk Notes
+
+- none
+
+## Output Files
+
+- experiments\onset_baseline_check\outputs\bootstrap_ci.csv
+- experiments\onset_baseline_check\outputs\onset_metrics.csv
+- experiments\onset_baseline_check\outputs\continuation_metrics.csv
+- experiments\onset_baseline_check\outputs\model_comparison_summary.csv
+- experiments\onset_baseline_check\outputs\topk_lift_table.csv
+- experiments\onset_baseline_check\outputs\delta_vs_persistence.csv
+- experiments\onset_baseline_check\outputs\feature_group_increment_table.csv
+- experiments\onset_baseline_check\outputs\robustness_grid_summary.csv
+- experiments\onset_baseline_check\outputs\training_sample_summary.csv
+- experiments\onset_baseline_check\outputs\selected_best_models.csv
+- experiments\onset_baseline_check\outputs\event_level_metrics.csv
+- experiments\onset_baseline_check\outputs\feature_importance_onset.csv
+- experiments\onset_baseline_check\outputs\feature_group_contribution_onset.csv
+- experiments\onset_baseline_check\outputs\fig_pr_curves_onset.png
+- experiments\onset_baseline_check\outputs\fig_topk_lift_onset.png
+- experiments\onset_baseline_check\outputs\fig_feature_importance_onset.png
+- experiments\onset_baseline_check\outputs\fig_pr_curves_onset.pdf
+- experiments\onset_baseline_check\outputs\fig_topk_lift_onset.pdf
+- experiments\onset_baseline_check\outputs\fig_feature_importance_onset.pdf
+- experiments\onset_baseline_check\outputs\onset_baseline_report.md
+- experiments\onset_baseline_check\outputs\inclusion_decision_note.md
+- experiments\onset_baseline_check\outputs\run_log.txt
